@@ -1,16 +1,18 @@
-﻿using RPGArmeni.Interfaces;
+﻿using System;
+using RPGArmeni.Interfaces;
 
 namespace RPGArmeni.Engine.Commands
 {
-	public class BoostHealthCommand : GameCommand
+	public class BoostHealthCommand : ICommand
 	{
-		public BoostHealthCommand(IGameEngine engine) : base(engine)
+		public bool HandlesInput(IKeyInfo keyInfo)
 		{
+			return keyInfo.Key == ConsoleKey.I;
 		}
 
-		public override void Execute()
+		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			Engine.Player.DrinkHealthBonusPotion();
+			gameEngine.Player.DrinkHealthBonusPotion();
 		}
 	}
 }

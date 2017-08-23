@@ -41,8 +41,7 @@ namespace RPGArmeni.Engine.Factories
 
 			var currentType = enemyTypes[RandomGenerator.GenerateNumber(0, enemyTypes.Length)];
 
-			var currentCharacter = Activator
-				.CreateInstance(currentType, new Position(currentX, currentY)) as ICharacter;
+			var currentCharacter = Activator.CreateInstance(currentType, new Position(currentX, currentY)) as ICharacter;
 			Engine.Map.Matrix[currentX, currentY] = currentCharacter.ObjectSymbol;
 
 			return currentCharacter;

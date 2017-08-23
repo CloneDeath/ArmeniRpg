@@ -4,6 +4,11 @@ namespace RPGArmeni.UI
 {
 	public static class ConsoleRenderer
 	{
+		public static void WriteLine()
+		{
+			Console.WriteLine();
+		}
+		
 		public static void WriteLine(string message, params object[] paramaters)
 		{
 			Console.WriteLine(message, paramaters);

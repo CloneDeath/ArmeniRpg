@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RPGArmeni.Exceptions;
 using RPGArmeni.Interfaces;
 using RPGArmeni.Models.Items;
@@ -6,101 +7,116 @@ using RPGArmeni.UI;
 
 namespace RPGArmeni.Engine.Commands
 {
-	public class MovePlayerCommand : GameCommand
+	public class MovePlayerCommand : ICommand
 	{
-		public MovePlayerCommand(IGameEngine engine) : base(engine)
-		{
-		}
-
-		public override void Execute(IKeyInfo directionKey)
-		{
-			Engine.Player.Move(directionKey);
-
-			var currentEnemy = FindEnemy();
-
-			if (currentEnemy != null)
-			{
-				EnterBattle(currentEnemy);
-				return;
-			}
-
-			var currentItem = FindItem();
-
-			if (currentItem != null)
-				CollectItem(currentItem);
-		}
-
-		public override void Execute()
-		{
-		}
-
-		private void CollectItem(IGameItem currentItem)
+		private void CollectItem(IGameEngine gameEngine, IGameItem currentItem)
 		{
 			currentItem.ItemState = ItemState.Collected;
-			Engine.Player.Inventory.BackPack.LootItem(currentItem);
+			gameEngine.Player.Inventory.BackPack.LootItem(currentItem);
 			ConsoleRenderer.WriteLine("{0} collected!", currentItem.GetType().Name);
 		}
 
-
-		private void EnterBattle(ICharacter currentEnemy)
+		private void EnterBattle(IGameEngine gameEngine, ICharacter currentEnemy)
 		{
 			ConsoleRenderer.WriteLine(
 				"An enemy {0} is approaching. Prepare for battle!",
 				currentEnemy.GetType().Name);
 			while (true)
 			{
-				Engine.Player.Attack(currentEnemy);
+				gameEngine.Player.Attack(currentEnemy);
 				ConsoleRenderer.WriteLine("You smash the {0} for {1} damage!",
-					currentEnemy.GetType().Name, Engine.Player.Damage);
+					currentEnemy.GetType().Name, gameEngine.Player.Damage);
 
 				if (currentEnemy.Health <= 0)
 				{
 					ConsoleRenderer.WriteLine("Enemy killed!");
-					ConsoleRenderer.WriteLine("Health Remaining: {0}", Engine.Player.Health);
-					Engine.RemoveEnemy(currentEnemy);
+					ConsoleRenderer.WriteLine("Health Remaining: {0}", gameEngine.Player.Health);
+					gameEngine.RemoveEnemy(currentEnemy);
 					return;
 				}
 
-				currentEnemy.Attack(Engine.Player);
+				currentEnemy.Attack(gameEngine.Player);
 				ConsoleRenderer.WriteLine("The {0} hits you for {1} damage!",
 					currentEnemy.GetType().Name, currentEnemy.Damage);
 
-				if (Engine.Player.Health < 150 && Engine.Player.Inventory.BackPack.SlotList.Any(x => x.GameItem is HealthPotion
-				                                                                                     || x.GameItem is
-					                                                                                     HealthBonusPotion))
+				if (gameEngine.Player.Health < 150 && gameEngine.Player.Inventory.BackPack.SlotList.Any(x =>
+					    x.GameItem is HealthPotion
+					    || x.GameItem is
+						    HealthBonusPotion))
+				{
 					try
 					{
-						Engine.Player.SelfHeal();
+						gameEngine.Player.SelfHeal();
 					}
 					catch (NoHealthPotionsException ex)
 					{
 						ConsoleRenderer.WriteLine(ex.Message);
 					}
+				}
 
-				if (Engine.Player.Health <= 0)
+				if (gameEngine.Player.Health <= 0)
 				{
-					Engine.IsRunning = false;
+					gameEngine.IsRunning = false;
 					GameStateScreens.ShowGameOverScreen();
 					return;
 				}
 			}
 		}
 
-		private IGameItem FindItem()
+		private IGameItem FindItem(IGameEngine gameEngine)
 		{
-			return Engine
+			return gameEngine
 				.Items
-				.FirstOrDefault(e => e.Position.X == Engine.Player.Position.X
-				                     && e.Position.Y == Engine.Player.Position.Y
+				.FirstOrDefault(e => e.Position.X == gameEngine.Player.Position.X
+				                     && e.Position.Y == gameEngine.Player.Position.Y
 				                     && e.ItemState == ItemState.Available);
 		}
 
-		private ICharacter FindEnemy()
+		private ICharacter FindEnemy(IGameEngine gameEngine)
 		{
-			return Engine
+			return gameEngine
 				.Characters
-				.FirstOrDefault(x => x.Position.X == Engine.Player.Position.X
-				                     && x.Position.Y == Engine.Player.Position.Y) as ICharacter;
+				.FirstOrDefault(x => x.Position.X == gameEngine.Player.Position.X
+				                     && x.Position.Y == gameEngine.Player.Position.Y) as ICharacter;
+		}
+
+		public bool HandlesInput(IKeyInfo keyInfo)
+		{
+			return keyInfo.Key == ConsoleKey.LeftArrow
+			       || keyInfo.Key == ConsoleKey.RightArrow
+			       || keyInfo.Key == ConsoleKey.UpArrow
+			       || keyInfo.Key == ConsoleKey.DownArrow;
+		}
+
+		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
+		{
+			ConsoleRenderer.WriteLine(
+				"Moved " +
+				keyInfo.Key.ToString().ToLower().Substring(0, keyInfo.Key.ToString().Length - 5));
+
+			MovePlayer(gameEngine, keyInfo);
+			PrintMap(gameEngine, keyInfo);
+		}
+
+		private void MovePlayer(IGameEngine gameEngine, IKeyInfo keyInfo)
+		{
+			gameEngine.Player.Move(keyInfo);
+
+			var currentEnemy = FindEnemy(gameEngine);
+
+			if (currentEnemy != null)
+			{
+				EnterBattle(gameEngine, currentEnemy);
+				return;
+			}
+
+			var currentItem = FindItem(gameEngine);
+			if (currentItem != null) CollectItem(gameEngine, currentItem);
+		}
+
+		private void PrintMap(IGameEngine gameEngine, IKeyInfo keyInfo)
+		{
+			new PrintMapCommand().Execute(gameEngine, keyInfo);
 		}
 	}
 }

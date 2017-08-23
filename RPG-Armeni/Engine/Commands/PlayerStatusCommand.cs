@@ -1,22 +1,23 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using RPGArmeni.Interfaces;
 using RPGArmeni.UI;
 
 namespace RPGArmeni.Engine.Commands
 {
-	public class PlayerStatusCommand : GameCommand
+	public class PlayerStatusCommand : ICommand
 	{
-		public PlayerStatusCommand(IGameEngine engine) : base(engine)
+		public bool HandlesInput(IKeyInfo keyInfo)
 		{
+			return keyInfo.Key == ConsoleKey.S;
 		}
 
-		public override void Execute()
+		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			ConsoleRenderer.WriteLine(Engine.Player.ToString());
-
+			ConsoleRenderer.WriteLine(gameEngine.Player.ToString());
 			ConsoleRenderer.WriteLine(
 				"Number of enemies left: {0}",
-				Engine.Characters.Count());
+				gameEngine.Characters.Count());
 		}
 	}
 }

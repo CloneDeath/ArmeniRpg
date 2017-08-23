@@ -1,16 +1,18 @@
-﻿using RPGArmeni.Interfaces;
+﻿using System;
+using RPGArmeni.Interfaces;
 
 namespace RPGArmeni.Engine.Commands
 {
-	public class BackPackCommand : GameCommand
+	public class BackPackCommand : ICommand
 	{
-		public BackPackCommand(IGameEngine engine) : base(engine)
+		public bool HandlesInput(IKeyInfo keyInfo)
 		{
+			return keyInfo.Key == ConsoleKey.B;
 		}
 
-		public override void Execute()
+		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			Engine.Player.Inventory.BackPack.ListItems();
+			gameEngine.Player.Inventory.BackPack.ListItems();
 		}
 	}
 }

@@ -4,21 +4,22 @@ using RPGArmeni.UI;
 
 namespace RPGArmeni.Engine.Commands
 {
-	public class PrintMapCommand : GameCommand
+	public class PrintMapCommand : ICommand
 	{
-		public PrintMapCommand(IGameEngine engine) : base(engine)
+		public bool HandlesInput(IKeyInfo keyInfo)
 		{
+			return keyInfo.Key == ConsoleKey.M;
 		}
 
-		public override void Execute()
+		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
 			ConsoleRenderer.BackgroundColor(ConsoleColor.Green);
 			ConsoleRenderer.ForegroundColor(ConsoleColor.Red);
-			for (var i = 0; i < Engine.Map.Height; i++)
+			for (var i = 0; i < gameEngine.Map.Height; i++)
 			{
-				for (var j = 0; j < Engine.Map.Width; j++)
+				for (var j = 0; j < gameEngine.Map.Width; j++)
 				{
-					switch (Engine.Map.Matrix[i, j])
+					switch (gameEngine.Map.Matrix[i, j])
 					{
 						case 'H':
 						case 'B':
@@ -39,12 +40,10 @@ namespace RPGArmeni.Engine.Commands
 							ConsoleRenderer.ForegroundColor(ConsoleColor.Red);
 							break;
 					}
-					ConsoleRenderer.Write(Engine.Map.Matrix[i, j].ToString());
+					ConsoleRenderer.Write(gameEngine.Map.Matrix[i, j].ToString());
 				}
-
-				ConsoleRenderer.WriteLine(string.Empty);
+				ConsoleRenderer.WriteLine();
 			}
-
 			ConsoleRenderer.ResetColor();
 		}
 	}

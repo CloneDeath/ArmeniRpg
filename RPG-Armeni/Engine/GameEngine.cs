@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using RPGArmeni.Engine.Commands;
 using RPGArmeni.Engine.Factories;
-using RPGArmeni.Exceptions;
 using RPGArmeni.Interfaces;
 using RPGArmeni.Models;
 using RPGArmeni.UI;
@@ -16,22 +15,29 @@ namespace RPGArmeni.Engine
 		private const int DefaultNumberOfEnemies = 20;
 		private const int DefaultNumberOfItems = 20;
 
-		private readonly IList<IGameObject> characters;
-		private readonly IList<IGameItem> items;
-
+		private readonly IList<IGameObject> _characters;
+		private readonly IList<IGameItem> _items;
+		
+		private readonly CommandFactory _commandFactory = new CommandFactory();
+		
 		public GameEngine()
 		{
-			characters = new List<IGameObject>();
-			items = new List<IGameItem>();
+			_characters = new List<IGameObject>();
+			_items = new List<IGameItem>();
 			Map = new Map(MapHeight, MapWidth);
 			InitializeMap();
 			NumberOfEnemies = DefaultNumberOfEnemies;
 			NumberOfItems = DefaultNumberOfItems;
 		}
 
-		public IEnumerable<IGameObject> Characters => characters;
+		public void RegisterCommand(ICommand command)
+		{
+			_commandFactory.RegisterCommand(command);
+		}
 
-		public IEnumerable<IGameItem> Items => items;
+		public IEnumerable<IGameObject> Characters => _characters;
+
+		public IEnumerable<IGameItem> Items => _items;
 
 		public IPlayer Player { get; private set; }
 
@@ -54,26 +60,16 @@ namespace RPGArmeni.Engine
 
 			IGameCommand spawnItems = new SpawnItemsCommand(this);
 			spawnItems.Execute();
-			ConsoleRenderer.WriteLine("Press F1 to get playing instructions.");
+			ConsoleRenderer.WriteLine("Press ? to get playing instructions.");
 
 			while (IsRunning)
 			{
 				IKeyInfo commandKey = new KeyInfo();
 
-				try
-				{
-					ExecuteCommand(commandKey);
-				}
-				catch (ObjectOutOfBoundsException ex)
-				{
-					ConsoleRenderer.WriteLine(ex.Message);
-				}
-				catch (Exception ex)
-				{
-					ConsoleRenderer.WriteLine(ex.Message);
-				}
+				ConsoleRenderer.Clear();
+				_commandFactory.Execute(this, commandKey);
 
-				if (characters.Count == 0)
+				if (_characters.Count == 0)
 				{
 					IsRunning = false;
 					ConsoleRenderer.WriteLine("All your enemies are dead. Congratulations! You are the only one left on earth.");
@@ -83,94 +79,24 @@ namespace RPGArmeni.Engine
 
 		public void AddItem(IGameItem itemToBeAdded)
 		{
-			items.Add(itemToBeAdded);
+			_items.Add(itemToBeAdded);
 		}
 
 		public void AddEnemy(ICharacter enemyToBeAdded)
 		{
-			characters.Add(enemyToBeAdded);
+			_characters.Add(enemyToBeAdded);
 		}
 
 		public void RemoveItem(IGameItem itemToBeRemoved)
 		{
-			items.Remove(itemToBeRemoved);
+			_items.Remove(itemToBeRemoved);
 		}
 
 		public void RemoveEnemy(ICharacter enemyToBeRemoved)
 		{
-			characters.Remove(enemyToBeRemoved);
+			_characters.Remove(enemyToBeRemoved);
 		}
-
-		protected virtual void ExecuteCommand(IKeyInfo commandKey)
-		{
-			IGameCommand currentCommand;
-			switch (commandKey.Key)
-			{
-				case ConsoleKey.F1:
-					currentCommand = new HelpCommand(this);
-					currentCommand.Execute();
-					break;
-				case ConsoleKey.M:
-					ConsoleRenderer.Clear();
-					currentCommand = new PrintMapCommand(this);
-					currentCommand.Execute();
-					break;
-				case ConsoleKey.LeftArrow:
-				case ConsoleKey.RightArrow:
-				case ConsoleKey.UpArrow:
-				case ConsoleKey.DownArrow:
-					ConsoleRenderer.Clear();
-					RenderSuccessMoveMessage(commandKey);
-					currentCommand = new MovePlayerCommand(this);
-					currentCommand.Execute(commandKey);
-					currentCommand = new PrintMapCommand(this);
-					currentCommand.Execute();
-					break;
-				case ConsoleKey.S:
-					currentCommand = new PlayerStatusCommand(this);
-					currentCommand.Execute();
-					break;
-				case ConsoleKey.C:
-					ConsoleRenderer.Clear();
-					break;
-				case ConsoleKey.H:
-					currentCommand = new HealCommand(this);
-					currentCommand.Execute();
-					break;
-				case ConsoleKey.I:
-					currentCommand = new BoostHealthCommand(this);
-					currentCommand.Execute();
-					break;
-				case ConsoleKey.R:
-					Player.Inventory.BackPack.RemoveLastItem();
-					break;
-				case ConsoleKey.B:
-					currentCommand = new BackPackCommand(this);
-					currentCommand.Execute();
-					break;
-				case ConsoleKey.Escape:
-					ExitApplication();
-					break;
-				default:
-				{
-					throw new ArgumentException("Unknown command");
-				}
-			}
-		}
-
-		private void ExitApplication()
-		{
-			IsRunning = false;
-			ConsoleRenderer.WriteLine("Good Bye! Do come again to play this great game!");
-		}
-
-		private static void RenderSuccessMoveMessage(IKeyInfo commandKey)
-		{
-			ConsoleRenderer.WriteLine(
-				"Moved " +
-				commandKey.Key.ToString().ToLower().Substring(0, commandKey.Key.ToString().Length - 5));
-		}
-
+		
 		private void InitializeMap()
 		{
 			for (var i = 0; i < Map.Height; i++)

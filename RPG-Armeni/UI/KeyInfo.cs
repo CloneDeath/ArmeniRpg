@@ -5,13 +5,14 @@ namespace RPGArmeni.UI
 {
 	public class KeyInfo : IKeyInfo
 	{
-		private ConsoleKeyInfo keyInfo;
+		private ConsoleKeyInfo _keyInfo;
 
 		public KeyInfo()
 		{
-			keyInfo = Console.ReadKey();
+			_keyInfo = Console.ReadKey();
 		}
 
-		public ConsoleKey Key => keyInfo.Key;
+		public ConsoleKey Key => _keyInfo.Key;
+		public char Character => _keyInfo.KeyChar;
 	}
 }
