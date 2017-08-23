@@ -1,12 +1,9 @@
-﻿namespace RPGArmeni.Exceptions
-{
-    using System;
+﻿using System;
 
-    public class NoHealthBonusPotionsException : Exception
-    {
-        public NoHealthBonusPotionsException(string message)
-            : base(message)
-        {
-        }
-    }
+namespace RPGArmeni.Exceptions
+{
+	public class NoHealthBonusPotionsException : Exception
+	{
+		public NoHealthBonusPotionsException(string message) : base(message) { }
+	}
 }

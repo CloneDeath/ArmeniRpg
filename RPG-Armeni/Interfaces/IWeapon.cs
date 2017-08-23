@@ -1,7 +1,7 @@
 ﻿namespace RPGArmeni.Interfaces
 {
 	public interface IWeapon
-    {
-        int AttackBonus { get; }
-    }
+	{
+		int AttackBonus { get; }
+	}
 }

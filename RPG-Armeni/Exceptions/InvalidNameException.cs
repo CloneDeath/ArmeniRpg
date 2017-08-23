@@ -1,12 +1,9 @@
-﻿namespace RPGArmeni.Exceptions
-{
-    using System;
+﻿using System;
 
-    public class InvalidNameException : Exception
-    {
-        public InvalidNameException(string message)
-            : base(message)
-        {
-        }
-    }
+namespace RPGArmeni.Exceptions
+{
+	public class InvalidNameException : Exception
+	{
+		public InvalidNameException(string message) : base(message) { }
+	}
 }

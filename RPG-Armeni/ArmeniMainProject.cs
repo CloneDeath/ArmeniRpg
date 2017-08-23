@@ -1,11 +1,11 @@
-﻿namespace RPGArmeni
-{
-    using System;
-    using System.Text;
-    using Engine;
-	using Interfaces;
-	using Engine.Factories;
+﻿using System;
+using System.Text;
+using RPGArmeni.Engine;
+using RPGArmeni.Engine.Factories;
+using RPGArmeni.Interfaces;
 
+namespace RPGArmeni
+{
 	public class ArmeniMainProject
 	{
 		public static void Main()

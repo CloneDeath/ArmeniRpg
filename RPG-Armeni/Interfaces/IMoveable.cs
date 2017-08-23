@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace RPGArmeni.Interfaces
+﻿namespace RPGArmeni.Interfaces
 {
-    public interface IMoveable
-    {
-        void Move(IKeyInfo direction);
-    }
+	public interface IMoveable
+	{
+		void Move(IKeyInfo direction);
+	}
 }

@@ -2,25 +2,19 @@
 
 namespace RPGArmeni.Models.Items
 {
-    [ItemAttribute]
-    public class HealthPotion : Item
-    {
-        private const char HealthPotionSymbol = 'H';
+	[Item]
+	public class HealthPotion : Item
+	{
+		private const char HealthPotionSymbol = 'H';
 
-        public HealthPotion(Position position, HealthPotionSize healthPotionSize)
-            : base(position, HealthPotionSymbol)
-        {
-            this.HealthPotionSize = healthPotionSize;
-        }
+		public HealthPotion(Position position, HealthPotionSize healthPotionSize)
+			: base(position, HealthPotionSymbol)
+		{
+			HealthPotionSize = healthPotionSize;
+		}
 
-        public int HealthRestore
-        {
-            get
-            {
-                return (int)this.HealthPotionSize;
-            }
-        }
+		public int HealthRestore => (int) HealthPotionSize;
 
-        public HealthPotionSize HealthPotionSize { get; set; }
-    }
+		public HealthPotionSize HealthPotionSize { get; set; }
+	}
 }

@@ -1,11 +1,10 @@
-﻿namespace RPGArmeni.Interfaces
+﻿using RPGArmeni.Models.Items.ArmorItems;
+
+namespace RPGArmeni.Interfaces
 {
-	using Models.Items.ArmorItems;
-
-    public interface IArmor
-    {
-        int DefenceBonus { get; }
-
-        ArmorType ArmorType { get; }
-    }
+	public interface IArmor
+	{
+		int DefenceBonus { get; }
+		ArmorType ArmorType { get; }
+	}
 }

@@ -1,9 +1,9 @@
-﻿namespace RPGArmeni.Interfaces
-{
-	using Models.Items;
+﻿using RPGArmeni.Models.Items;
 
-    public interface IGameItem : IGameObject
-    {
-        ItemState ItemState { get; set; }
-    }
+namespace RPGArmeni.Interfaces
+{
+	public interface IGameItem : IGameObject
+	{
+		ItemState ItemState { get; set; }
+	}
 }

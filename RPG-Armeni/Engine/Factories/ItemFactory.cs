@@ -1,111 +1,108 @@
-﻿namespace RPGArmeni.Engine.Factories
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using RPGArmeni.Attributes;
+using RPGArmeni.Interfaces;
+using RPGArmeni.Models.Items;
+
+namespace RPGArmeni.Engine.Factories
 {
-    using Attributes;
-    using Interfaces;
-    using Models.Items;
-    using System;
-    using System.Linq;
-    using System.Reflection;
+	public class ItemFactory
+	{
+		private static ItemFactory instance;
 
-    public class ItemFactory
-    {
-        private static ItemFactory instance;
+		private ItemFactory()
+		{
+		}
 
-        private ItemFactory()
-        {
-        }
+		public static ItemFactory Instance
+		{
+			get
+			{
+				if (instance == null)
+					instance = new ItemFactory();
 
-        public static ItemFactory Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ItemFactory();
-                }
+				return instance;
+			}
+		}
 
-                return instance;
-            }
-        }
+		public IGameEngine Engine { get; set; }
 
-        public IGameEngine Engine { get; set; }
+		public IGameItem CreateItem()
+		{
+			var currentX = RandomGenerator.GenerateNumber(0, Engine.Map.Height);
+			var currentY = RandomGenerator.GenerateNumber(0, Engine.Map.Width);
 
-        public IGameItem CreateItem()
-        {
-            int currentX = RandomGenerator.GenerateNumber(0, this.Engine.Map.Height);
-            int currentY = RandomGenerator.GenerateNumber(0, this.Engine.Map.Width);
+			var isEmptySpot = Engine.Map.Matrix[currentX, currentY] == '.';
 
-            bool isEmptySpot = this.Engine.Map.Matrix[currentX, currentY] == '.';
+			while (!isEmptySpot)
+			{
+				currentX = RandomGenerator.GenerateNumber(0, Engine.Map.Height);
+				currentY = RandomGenerator.GenerateNumber(0, Engine.Map.Width);
 
-            while (!isEmptySpot)
-            {
-                currentX = RandomGenerator.GenerateNumber(0, this.Engine.Map.Height);
-                currentY = RandomGenerator.GenerateNumber(0, this.Engine.Map.Width);
+				isEmptySpot = Engine.Map.Matrix[currentX, currentY] == '.';
+			}
+			var itemTypes = Assembly.GetExecutingAssembly()
+				.GetTypes()
+				.Where(type => type.CustomAttributes
+					.Any(a => a.AttributeType == typeof(ItemAttribute)))
+				.ToArray();
+			var currentType = itemTypes[RandomGenerator.GenerateNumber(0, itemTypes.Length)];
+			IGameItem currentItem;
+			if (currentType.Name == "HealthPotion")
+			{
+				var potionType = RandomGenerator.GenerateNumber(0, 3);
 
-                isEmptySpot = this.Engine.Map.Matrix[currentX, currentY] == '.';
-            }
-            var itemTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(type => type.CustomAttributes
-                    .Any(a => a.AttributeType == typeof(ItemAttribute)))
-                    .ToArray();
-            Type currentType = itemTypes[RandomGenerator.GenerateNumber(0, itemTypes.Length)];
-            IGameItem currentItem;
-            if (currentType.Name == "HealthPotion")
-            {
-                int potionType = RandomGenerator.GenerateNumber(0, 3);
+				HealthPotionSize potionSize;
 
-                HealthPotionSize potionSize;
+				switch (potionType)
+				{
+					case 0:
+						potionSize = HealthPotionSize.Minor;
+						break;
+					case 1:
+						potionSize = HealthPotionSize.Normal;
+						break;
+					case 2:
+						potionSize = HealthPotionSize.Major;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException("Invalid potion type.");
+				}
 
-                switch (potionType)
-                {
-                    case 0:
-                        potionSize = HealthPotionSize.Minor;
-                        break;
-                    case 1:
-                        potionSize = HealthPotionSize.Normal;
-                        break;
-                    case 2:
-                        potionSize = HealthPotionSize.Major;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException("Invalid potion type.");
-                }
+				currentItem = new HealthPotion(new Position(currentX, currentY), potionSize);
+				Engine.Map.Matrix[currentX, currentY] = currentItem.ObjectSymbol;
+				return currentItem;
+			}
+			if (currentType.Name == "HealthBonusPotion")
+			{
+				var potionType = RandomGenerator.GenerateNumber(0, 3);
 
-                currentItem = new HealthPotion(new Position(currentX, currentY), potionSize);
-                this.Engine.Map.Matrix[currentX, currentY] = currentItem.ObjectSymbol;
-                return currentItem;
-            }
-            else if (currentType.Name == "HealthBonusPotion")
-            {
-                int potionType = RandomGenerator.GenerateNumber(0, 3);
+				HealthBonusPotionSize potionSize;
 
-                HealthBonusPotionSize potionSize;
+				switch (potionType)
+				{
+					case 0:
+						potionSize = HealthBonusPotionSize.Minor;
+						break;
+					case 1:
+						potionSize = HealthBonusPotionSize.Normal;
+						break;
+					case 2:
+						potionSize = HealthBonusPotionSize.Major;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException("Invalid potion type.");
+				}
 
-                switch (potionType)
-                {
-                    case 0:
-                        potionSize = HealthBonusPotionSize.Minor;
-                        break;
-                    case 1:
-                        potionSize = HealthBonusPotionSize.Normal;
-                        break;
-                    case 2:
-                        potionSize = HealthBonusPotionSize.Major;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException("Invalid potion type.");
-                }
+				currentItem = new HealthBonusPotion(new Position(currentX, currentY), potionSize);
+				Engine.Map.Matrix[currentX, currentY] = currentItem.ObjectSymbol;
+				return currentItem;
+			}
+			currentItem = Activator.CreateInstance(currentType, new Position(currentX, currentY)) as IGameItem;
+			Engine.Map.Matrix[currentX, currentY] = currentItem.ObjectSymbol;
 
-                currentItem = new HealthBonusPotion(new Position(currentX, currentY), potionSize);
-                this.Engine.Map.Matrix[currentX, currentY] = currentItem.ObjectSymbol;
-                return currentItem;
-            }
-            currentItem = Activator.CreateInstance(currentType, new Position(currentX, currentY)) as IGameItem;
-            this.Engine.Map.Matrix[currentX, currentY] = currentItem.ObjectSymbol;
-
-            return currentItem;
-            
-        }
-    }
+			return currentItem;
+		}
+	}
 }

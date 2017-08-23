@@ -1,20 +1,17 @@
-﻿namespace RPGArmeni.UI
+﻿using System;
+using RPGArmeni.Interfaces;
+
+namespace RPGArmeni.UI
 {
-    using System;
-    using Interfaces;
+	public class KeyInfo : IKeyInfo
+	{
+		private ConsoleKeyInfo keyInfo;
 
-    public class KeyInfo : IKeyInfo
-    {
-        private ConsoleKeyInfo keyInfo;
+		public KeyInfo()
+		{
+			keyInfo = Console.ReadKey();
+		}
 
-        public KeyInfo()
-        {
-            this.keyInfo = Console.ReadKey();
-        }
-
-        public ConsoleKey Key
-        {
-            get { return keyInfo.Key; }
-        }
-    }
+		public ConsoleKey Key => keyInfo.Key;
+	}
 }

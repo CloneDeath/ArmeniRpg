@@ -1,18 +1,16 @@
-﻿namespace RPGArmeni
+﻿using RPGArmeni.Interfaces;
+
+namespace RPGArmeni
 {
-    using Interfaces;
+	public struct Position : IPosition
+	{
+		public Position(int x, int y)
+		{
+			X = x;
+			Y = y;
+		}
 
-    public struct Position : IPosition
-    {
-        public Position(int x, int y)
-            : this()
-        {
-            this.X = x;
-            this.Y = y;
-        }
-
-        public int X { get; set; }
-
-        public int Y { get; set; }
-    }
+		public int X { get; set; }
+		public int Y { get; set; }
+	}
 }

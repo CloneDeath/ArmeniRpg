@@ -1,12 +1,9 @@
-﻿namespace RPGArmeni.Exceptions
-{
-    using System;
+﻿using System;
 
-    public class NoSlotAvailableException : Exception
-    {
-        public NoSlotAvailableException(string message)
-            : base(message)
-        {
-        }
-    }
+namespace RPGArmeni.Exceptions
+{
+	public class NoSlotAvailableException : Exception
+	{
+		public NoSlotAvailableException(string message) : base(message) { }
+	}
 }

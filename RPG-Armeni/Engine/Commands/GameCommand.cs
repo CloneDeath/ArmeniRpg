@@ -1,33 +1,20 @@
-﻿namespace RPGArmeni.Engine.Commands
+﻿using RPGArmeni.Interfaces;
+
+namespace RPGArmeni.Engine.Commands
 {
-    using Interfaces;
-
 	public abstract class GameCommand : IGameCommand
-    {
-        private IGameEngine engine;
+	{
+		protected GameCommand(IGameEngine engine)
+		{
+			Engine = engine;
+		}
 
-        public GameCommand(IGameEngine engine)
-        {
-            this.Engine = engine;
-        }
+		public IGameEngine Engine { get; set; }
 
-        public IGameEngine Engine
-        {
-            get
-            {
-                return this.engine;
-            }
-            set
-            {
-                this.engine = value;
-            }
-        }
-        
-	    public virtual void Execute(IKeyInfo directionKey)
-	    {
-	        
-	    }
+		public virtual void Execute(IKeyInfo directionKey)
+		{
+		}
 
-        public abstract void Execute();
-    }
+		public abstract void Execute();
+	}
 }

@@ -1,62 +1,51 @@
-﻿namespace RPGArmeni.Engine.Factories
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using RPGArmeni.Attributes;
+using RPGArmeni.Interfaces;
+
+namespace RPGArmeni.Engine.Factories
 {
-    using Attributes;
-    using Interfaces;
-    using System;
-    using System.Linq;
-    using System.Reflection;
-
 	public class CharacterFactory
-    {
-        private static CharacterFactory instance;
+	{
+		private static CharacterFactory _instance;
 
-        private CharacterFactory()
-        {
-        }
+		private CharacterFactory()
+		{
+		}
 
-        public static CharacterFactory Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new CharacterFactory();
-                }
+		public static CharacterFactory Instance => _instance ?? (_instance = new CharacterFactory());
 
-                return instance;
-            }
-        }
+		public IGameEngine Engine { get; set; }
 
-        public IGameEngine Engine { get; set; }
+		public ICharacter CreateCharacter()
+		{
+			var currentX = RandomGenerator.GenerateNumber(0, Engine.Map.Height);
+			var currentY = RandomGenerator.GenerateNumber(0, Engine.Map.Width);
 
-        public ICharacter CreateCharacter()
-        {
-            int currentX = RandomGenerator.GenerateNumber(0, this.Engine.Map.Height);
-            int currentY = RandomGenerator.GenerateNumber(0, this.Engine.Map.Width);
+			var isEmptySpot = Engine.Map.Matrix[currentX, currentY] == '.';
 
-            bool isEmptySpot = this.Engine.Map.Matrix[currentX, currentY] == '.';
+			while (!isEmptySpot)
+			{
+				currentX = RandomGenerator.GenerateNumber(0, Engine.Map.Height);
+				currentY = RandomGenerator.GenerateNumber(0, Engine.Map.Width);
 
-            while (!isEmptySpot)
-            {
-                currentX = RandomGenerator.GenerateNumber(0, this.Engine.Map.Height);
-                currentY = RandomGenerator.GenerateNumber(0, this.Engine.Map.Width);
+				isEmptySpot = Engine.Map.Matrix[currentX, currentY] == '.';
+			}
 
-                isEmptySpot = this.Engine.Map.Matrix[currentX, currentY] == '.';
-            }
+			var enemyTypes = Assembly.GetExecutingAssembly()
+				.GetTypes()
+				.Where(type => type.CustomAttributes
+					.Any(a => a.AttributeType == typeof(EnemyAttribute)))
+				.ToArray();
 
-            var enemyTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(type => type.CustomAttributes
-                    .Any(a => a.AttributeType == typeof(EnemyAttribute)))
-                    .ToArray();
+			var currentType = enemyTypes[RandomGenerator.GenerateNumber(0, enemyTypes.Length)];
 
-            Type currentType = enemyTypes[RandomGenerator.GenerateNumber(0, enemyTypes.Length)];
+			var currentCharacter = Activator
+				.CreateInstance(currentType, new Position(currentX, currentY)) as ICharacter;
+			Engine.Map.Matrix[currentX, currentY] = currentCharacter.ObjectSymbol;
 
-            ICharacter currentCharacter = Activator
-                .CreateInstance(currentType, new Position(currentX, currentY)) as ICharacter;
-            this.Engine.Map.Matrix[currentX, currentY] = currentCharacter.ObjectSymbol;
-
-            return currentCharacter;
-        }
-    }
+			return currentCharacter;
+		}
+	}
 }

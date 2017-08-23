@@ -2,8 +2,8 @@
 
 namespace RPGArmeni.Interfaces
 {
-    public interface IKeyInfo
-    {
-        ConsoleKey Key { get; }
-    }
+	public interface IKeyInfo
+	{
+		ConsoleKey Key { get; }
+	}
 }

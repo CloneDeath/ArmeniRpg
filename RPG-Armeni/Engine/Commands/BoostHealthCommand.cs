@@ -1,18 +1,16 @@
-﻿namespace RPGArmeni.Engine.Commands
+﻿using RPGArmeni.Interfaces;
+
+namespace RPGArmeni.Engine.Commands
 {
-    using Interfaces;
-    using System;
+	public class BoostHealthCommand : GameCommand
+	{
+		public BoostHealthCommand(IGameEngine engine) : base(engine)
+		{
+		}
 
-    public class BoostHealthCommand : GameCommand
-    {
-        public BoostHealthCommand(IGameEngine engine)
-            : base(engine)
-        {
-        }
-
-        public override void Execute()
-        {
-            this.Engine.Player.DrinkHealthBonusPotion();
-        }
-    }
+		public override void Execute()
+		{
+			Engine.Player.DrinkHealthBonusPotion();
+		}
+	}
 }

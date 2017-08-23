@@ -1,9 +1,9 @@
-﻿namespace RPGArmeni.Attributes
-{
-    using System;
+﻿using System;
 
-    [AttributeUsage(AttributeTargets.Class)]
-    public class EnemyAttribute : Attribute
-    {
-    }
+namespace RPGArmeni.Attributes
+{
+	[AttributeUsage(AttributeTargets.Class)]
+	public class EnemyAttribute : Attribute
+	{
+	}
 }

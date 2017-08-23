@@ -1,8 +1,8 @@
 ﻿namespace RPGArmeni.Models.Items
 {
-    public enum ItemState
-    {
-        Available,
-        Collected
-    }
+	public enum ItemState
+	{
+		Available,
+		Collected
+	}
 }

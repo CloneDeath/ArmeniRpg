@@ -1,12 +1,9 @@
-﻿namespace RPGArmeni.Exceptions
-{
-    using System;
+﻿using System;
 
-    public class ObjectOutOfBoundsException : Exception
-    {
-        public ObjectOutOfBoundsException(string message)
-            : base(message)
-        {
-        }
-    }
+namespace RPGArmeni.Exceptions
+{
+	public class ObjectOutOfBoundsException : Exception
+	{
+		public ObjectOutOfBoundsException(string message) : base(message) { }
+	}
 }

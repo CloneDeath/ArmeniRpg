@@ -1,22 +1,21 @@
-﻿namespace RPGArmeni.Engine.Commands
-{
-    using Factories;
-    using Interfaces;
+﻿using RPGArmeni.Engine.Factories;
+using RPGArmeni.Interfaces;
 
-    public class SpawnItemsCommand : GameCommand
-    {
-        public SpawnItemsCommand(IGameEngine engine)
-            : base(engine)
-        {
-        }
-        
-        public override void Execute()
-        {
-            for (int i = 0; i < this.Engine.NumberOfItems; i++)
-            {
-                IGameItem newItem = ItemFactory.Instance.CreateItem();
-                this.Engine.AddItem(newItem);
-            }
-        }
-    }
+namespace RPGArmeni.Engine.Commands
+{
+	public class SpawnItemsCommand : GameCommand
+	{
+		public SpawnItemsCommand(IGameEngine engine) : base(engine)
+		{
+		}
+
+		public override void Execute()
+		{
+			for (var i = 0; i < Engine.NumberOfItems; i++)
+			{
+				var newItem = ItemFactory.Instance.CreateItem();
+				Engine.AddItem(newItem);
+			}
+		}
+	}
 }

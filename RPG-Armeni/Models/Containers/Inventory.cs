@@ -1,154 +1,82 @@
-﻿namespace RPGArmeni.Models.Containers
+﻿using System.Collections.Generic;
+using System.Linq;
+using RPGArmeni.Exceptions;
+using RPGArmeni.Interfaces;
+
+namespace RPGArmeni.Models.Containers
 {
-    using RPGArmeni.Exceptions;
-    using RPGArmeni.Interfaces;
-    using System.Collections.Generic;
-    using System.Linq;
+	public class Inventory : IInventory
+	{
+		private readonly Dictionary<int, ISlot> armorSlots;
+		private readonly List<ISlot> slotList;
+		private readonly Dictionary<int, ISlot> weaponSlots;
 
-    public class Inventory : IInventory
-    {
-        private ISlot mainHandSlot;
-        private ISlot offHandSlot;
-        private ISlot chestSlot;
-        private ISlot headSlot;
-        private ISlot feetSlot;
-        private ISlot glovesSlot;
-        private IContainer backPack;
-        private List<ISlot> slotList;
-        private Dictionary<int, ISlot> weaponSlots;
-        private Dictionary<int, ISlot> armorSlots;
+		public Inventory()
+		{
+			MainHandSlot = new Slot();
+			OffHandSlot = new Slot();
+			ChestSlot = new Slot();
+			HeadSlot = new Slot();
+			FeetSlot = new Slot();
+			GlovesSlot = new Slot();
+			slotList = new List<ISlot>();
+			slotList.Add(MainHandSlot);
+			weaponSlots = new Dictionary<int, ISlot>();
+			armorSlots = new Dictionary<int, ISlot>();
+			BackPack = new BackPack();
 
-        public Inventory()
-        {
-            this.MainHandSlot = new Slot();
-            this.OffHandSlot = new Slot();
-            this.ChestSlot = new Slot();
-            this.HeadSlot = new Slot();
-            this.FeetSlot = new Slot();
-            this.GlovesSlot = new Slot();
-            this.slotList = new List<ISlot>();
-            this.slotList.Add(this.MainHandSlot);
-            this.weaponSlots = new Dictionary<int, ISlot>();
-            this.armorSlots = new Dictionary<int, ISlot>();
-            this.BackPack = new BackPack();
+			weaponSlots.Add(1, MainHandSlot);
+			weaponSlots.Add(2, OffHandSlot);
 
-            this.weaponSlots.Add(1, this.MainHandSlot);
-            this.weaponSlots.Add(2, this.OffHandSlot);
+			armorSlots.Add(1, ChestSlot);
+			armorSlots.Add(2, HeadSlot);
+			armorSlots.Add(3, FeetSlot);
+			armorSlots.Add(4, GlovesSlot);
+		}
 
-            this.armorSlots.Add(1, this.ChestSlot);
-            this.armorSlots.Add(2, this.HeadSlot);
-            this.armorSlots.Add(3, this.FeetSlot);
-            this.armorSlots.Add(4, this.GlovesSlot);
-        }
+		public ISlot MainHandSlot { get; }
 
-        public ISlot MainHandSlot
-        {
-            get { return this.mainHandSlot; }
-            private set
-            {
-                this.mainHandSlot = value;
-            }
-        }
+		public ISlot OffHandSlot { get; }
 
-        public ISlot OffHandSlot
-        {
-            get { return this.offHandSlot; }
-            private set
-            {
-                this.offHandSlot = value;
-            }
-        }
+		public ISlot ChestSlot { get; }
 
-        public ISlot ChestSlot
-        {
-            get { return this.chestSlot; }
-            private set
-            {
-                this.chestSlot = value;
-            }
-        }
+		public ISlot HeadSlot { get; }
 
-        public ISlot HeadSlot
-        {
-            get { return this.headSlot; }
-            private set
-            {
-                this.headSlot = value;
-            }
-        }
+		public ISlot FeetSlot { get; }
 
-        public ISlot FeetSlot
-        {
-            get { return this.feetSlot; }
-            private set
-            {
-                this.feetSlot = value;
-            }
-        }
+		public ISlot GlovesSlot { get; }
 
-        public ISlot GlovesSlot
-        {
-            get { return this.glovesSlot; }
-            private set
-            {
-                this.glovesSlot = value;
-            }
-        }
+		public IContainer BackPack { get; }
 
-        public IContainer BackPack
-        {
-            get { return this.backPack; }
-            private set
-            {
-                this.backPack = value;
-            }
-        }
+		public IEnumerable<ISlot> SlotList => slotList;
 
-        public IEnumerable<ISlot> SlotList
-        {
-            get { return this.slotList; }
-        }
+		public IDictionary<int, ISlot> WeaponSlots => weaponSlots;
 
-        public IDictionary<int, ISlot> WeaponSlots
-        {
-            get { return this.weaponSlots; }
-        }
+		public IDictionary<int, ISlot> ArmorSlots => armorSlots;
 
-        public IDictionary<int, ISlot> ArmorSlots
-        {
-            get { return this.armorSlots; }
-        }
+		public void ClearInventory()
+		{
+			foreach (var currentSlot in SlotList)
+				currentSlot.ClearSlot();
+		}
 
-        public void ClearInventory()
-        {
-            foreach (ISlot currentSlot in this.SlotList)
-            {
-                currentSlot.ClearSlot();
-            }
-        }
+		public void EquipItem(IGameItem itemToBeEquipped)
+		{
+			if (itemToBeEquipped is IWeapon)
+			{
+				var currentSlot = SlotList.FirstOrDefault(x => x.IsEmpty && x.GameItem is IWeapon);
 
-        public void EquipItem(IGameItem itemToBeEquipped)
-        {
-            if (itemToBeEquipped is IWeapon)
-            {
-                ISlot currentSlot = this.SlotList.FirstOrDefault(x => x.IsEmpty && x.GameItem is IWeapon);
+				if (currentSlot == null)
+					throw new NoSlotAvailableException("There is no available slot.");
+				currentSlot.GameItem = itemToBeEquipped;
+			}
+		}
 
-                if (currentSlot == null)
-                {
-                    throw new NoSlotAvailableException("There is no available slot.");
-                }
-                else
-                {
-                    currentSlot.GameItem = itemToBeEquipped;
-                }
-            }
-        }
-
-        public void RemoveItem(IGameItem itemToBeRemoved)
-        {
-            ISlot currentSlot = this.SlotList.FirstOrDefault(x => x.GameItem == itemToBeRemoved);
-            currentSlot.GameItem = null;
-            currentSlot.IsEmpty = true;
-        }
-    }
+		public void RemoveItem(IGameItem itemToBeRemoved)
+		{
+			var currentSlot = SlotList.FirstOrDefault(x => x.GameItem == itemToBeRemoved);
+			currentSlot.GameItem = null;
+			currentSlot.IsEmpty = true;
+		}
+	}
 }

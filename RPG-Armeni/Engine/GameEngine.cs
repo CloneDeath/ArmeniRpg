@@ -1,239 +1,184 @@
-﻿namespace RPGArmeni.Engine
+﻿using System;
+using System.Collections.Generic;
+using RPGArmeni.Engine.Commands;
+using RPGArmeni.Engine.Factories;
+using RPGArmeni.Exceptions;
+using RPGArmeni.Interfaces;
+using RPGArmeni.Models;
+using RPGArmeni.UI;
+
+namespace RPGArmeni.Engine
 {
-    using System;
-    using System.Collections.Generic;
-    using Exceptions;
-    using Interfaces;
-    using UI;
-    using Factories;
-    using Commands;
-    using Models;
+	public class GameEngine : IGameEngine
+	{
+		public const int MapHeight = 20;
+		public const int MapWidth = 50;
+		private const int DefaultNumberOfEnemies = 20;
+		private const int DefaultNumberOfItems = 20;
 
-    public class GameEngine : IGameEngine
-    {
-        public const int MapHeight = 20;
-        public const int MapWidth = 50;
-        private const int DefaultNumberOfEnemies = 20;
-        private const int DefaultNumberOfItems = 20;
+		private readonly IList<IGameObject> characters;
+		private readonly IList<IGameItem> items;
 
-        private int numberOfEnemies;
-        private int numberOfItems;
+		public GameEngine()
+		{
+			characters = new List<IGameObject>();
+			items = new List<IGameItem>();
+			Map = new Map(MapHeight, MapWidth);
+			InitializeMap();
+			NumberOfEnemies = DefaultNumberOfEnemies;
+			NumberOfItems = DefaultNumberOfItems;
+		}
 
-        private readonly IList<IGameObject> characters;
-        private readonly IList<IGameItem> items;
-        private IPlayer player;
-        private IMap map;
+		public IEnumerable<IGameObject> Characters => characters;
 
-        public GameEngine()
-        {
-            this.characters = new List<IGameObject>();
-            this.items = new List<IGameItem>();
-            this.Map = new Map(MapHeight, MapWidth);
-            this.InitializeMap();
-            this.NumberOfEnemies = DefaultNumberOfEnemies;
-            this.NumberOfItems = DefaultNumberOfItems;
-        }
+		public IEnumerable<IGameItem> Items => items;
 
-        public IEnumerable<IGameObject> Characters
-        {
-            get
-            {
-                return this.characters;
-            }
-        }
+		public IPlayer Player { get; private set; }
 
-        public IEnumerable<IGameItem> Items
-        {
-            get
-            {
-                return this.items;
-            }
-        }
+		public IMap Map { get; }
 
-        public IPlayer Player
-        {
-            get { return this.player; }
-            private set
-            {
-                this.player = value;
-            }
-        }
+		public int NumberOfItems { get; }
 
-        public IMap Map
-        {
-            get { return this.map; }
-            private set
-            {
-                this.map = value;
-            }
-        }
+		public int NumberOfEnemies { get; }
 
-        public int NumberOfItems
-        {
-            get { return this.numberOfItems; }
-            private set
-            {
-                this.numberOfItems = value;
-            }
-        }
+		public bool IsRunning { get; set; }
 
-        public int NumberOfEnemies
-        {
-            get { return this.numberOfEnemies; }
-            private set
-            {
-                this.numberOfEnemies = value;
-            }
-        }
+		public virtual void Run()
+		{
+			IsRunning = true;
+			Player = PlayerFactory.Instance.CreatePlayer();
+			Player.Engine = this;
 
-        public bool IsRunning { get; set; }
+			IGameCommand spawnEnemies = new SpawnEnemiesCommand(this);
+			spawnEnemies.Execute();
 
-        public virtual void Run()
-        {
-            this.IsRunning = true;
-            this.player = PlayerFactory.Instance.CreatePlayer();
-            this.player.Engine = this;
+			IGameCommand spawnItems = new SpawnItemsCommand(this);
+			spawnItems.Execute();
+			ConsoleRenderer.WriteLine("Press F1 to get playing instructions.");
 
-            IGameCommand spawnEnemies = new SpawnEnemiesCommand(this);
-            spawnEnemies.Execute();
+			while (IsRunning)
+			{
+				IKeyInfo commandKey = new KeyInfo();
 
-            IGameCommand spawnItems = new SpawnItemsCommand(this);
-            spawnItems.Execute();
-            ConsoleRenderer.WriteLine("Press F1 to get playing instructions.");
+				try
+				{
+					ExecuteCommand(commandKey);
+				}
+				catch (ObjectOutOfBoundsException ex)
+				{
+					ConsoleRenderer.WriteLine(ex.Message);
+				}
+				catch (Exception ex)
+				{
+					ConsoleRenderer.WriteLine(ex.Message);
+				}
 
-            while (this.IsRunning)
-            {
-                IKeyInfo commandKey = new KeyInfo();
+				if (characters.Count == 0)
+				{
+					IsRunning = false;
+					ConsoleRenderer.WriteLine("All your enemies are dead. Congratulations! You are the only one left on earth.");
+				}
+			}
+		}
 
-                try
-                {
-                    this.ExecuteCommand(commandKey);
-                }
-                catch (ObjectOutOfBoundsException ex)
-                {
-                    ConsoleRenderer.WriteLine(ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    ConsoleRenderer.WriteLine(ex.Message);
-                }
+		public void AddItem(IGameItem itemToBeAdded)
+		{
+			items.Add(itemToBeAdded);
+		}
 
-                if (this.characters.Count == 0)
-                {
-                    this.IsRunning = false;
-                    ConsoleRenderer.WriteLine("All your enemies are dead. Congratulations! You are the only one left on earth.");
-                }
-            }
-        }
+		public void AddEnemy(ICharacter enemyToBeAdded)
+		{
+			characters.Add(enemyToBeAdded);
+		}
 
-        protected virtual void ExecuteCommand(IKeyInfo commandKey)
-        {
-            IGameCommand currentCommand;
-            switch (commandKey.Key)
-            {
-                case ConsoleKey.F1:
-                    currentCommand = new HelpCommand(this);
-                    currentCommand.Execute();
-                    break;
-                case ConsoleKey.M:
-                    ConsoleRenderer.Clear();
-                    currentCommand = new PrintMapCommand(this);
-                    currentCommand.Execute();
-                    break;
-                case ConsoleKey.LeftArrow:
-                case ConsoleKey.RightArrow:
-                case ConsoleKey.UpArrow:
-                case ConsoleKey.DownArrow:
-                    ConsoleRenderer.Clear();
-                    RenderSuccessMoveMessage(commandKey);
-                    currentCommand = new MovePlayerCommand(this);
-                    currentCommand.Execute(commandKey);
-                    currentCommand = new PrintMapCommand(this);
-                    currentCommand.Execute();
-                    break;
-                case ConsoleKey.S:
-                    currentCommand = new PlayerStatusCommand(this);
-                    currentCommand.Execute();
-                    break;
-                case ConsoleKey.C:
-                    ConsoleRenderer.Clear();
-                    break;
-                case ConsoleKey.H: 
-                    currentCommand = new HealCommand(this);
-                    currentCommand.Execute();
-                    break;
-                case ConsoleKey.I:
-                    currentCommand = new BoostHealthCommand(this);
-                    currentCommand.Execute();
-                    break;
-                case ConsoleKey.R:
-                    this.Player.Inventory.BackPack.RemoveLastItem();
-                    break;
-                case ConsoleKey.B: 
-                    currentCommand = new BackPackCommand(this);
-                    currentCommand.Execute();
-                    break;
-                case ConsoleKey.Escape:
-                    this.ExitApplication();
-                    break;
-                default:
-                    {
-                        throw new ArgumentException("Unknown command");
-                    }
-            }
-        }
+		public void RemoveItem(IGameItem itemToBeRemoved)
+		{
+			items.Remove(itemToBeRemoved);
+		}
 
-        private void ExitApplication()
-        {
-            this.IsRunning = false;
-            ConsoleRenderer.WriteLine("Good Bye! Do come again to play this great game!");
-        }
+		public void RemoveEnemy(ICharacter enemyToBeRemoved)
+		{
+			characters.Remove(enemyToBeRemoved);
+		}
 
-        private static void RenderSuccessMoveMessage(IKeyInfo commandKey)
-        {
-            ConsoleRenderer.WriteLine(
-                                    "Moved " +
-                                    commandKey.
-                                    Key.ToString().ToLower().
-                                    Substring(0, commandKey.Key.ToString().Length - 5));
-        }
+		protected virtual void ExecuteCommand(IKeyInfo commandKey)
+		{
+			IGameCommand currentCommand;
+			switch (commandKey.Key)
+			{
+				case ConsoleKey.F1:
+					currentCommand = new HelpCommand(this);
+					currentCommand.Execute();
+					break;
+				case ConsoleKey.M:
+					ConsoleRenderer.Clear();
+					currentCommand = new PrintMapCommand(this);
+					currentCommand.Execute();
+					break;
+				case ConsoleKey.LeftArrow:
+				case ConsoleKey.RightArrow:
+				case ConsoleKey.UpArrow:
+				case ConsoleKey.DownArrow:
+					ConsoleRenderer.Clear();
+					RenderSuccessMoveMessage(commandKey);
+					currentCommand = new MovePlayerCommand(this);
+					currentCommand.Execute(commandKey);
+					currentCommand = new PrintMapCommand(this);
+					currentCommand.Execute();
+					break;
+				case ConsoleKey.S:
+					currentCommand = new PlayerStatusCommand(this);
+					currentCommand.Execute();
+					break;
+				case ConsoleKey.C:
+					ConsoleRenderer.Clear();
+					break;
+				case ConsoleKey.H:
+					currentCommand = new HealCommand(this);
+					currentCommand.Execute();
+					break;
+				case ConsoleKey.I:
+					currentCommand = new BoostHealthCommand(this);
+					currentCommand.Execute();
+					break;
+				case ConsoleKey.R:
+					Player.Inventory.BackPack.RemoveLastItem();
+					break;
+				case ConsoleKey.B:
+					currentCommand = new BackPackCommand(this);
+					currentCommand.Execute();
+					break;
+				case ConsoleKey.Escape:
+					ExitApplication();
+					break;
+				default:
+				{
+					throw new ArgumentException("Unknown command");
+				}
+			}
+		}
 
-        private void InitializeMap()
-        {
-            for (int i = 0; i < this.Map.Height; i++)
-            {
-                for (int j = 0; j < this.Map.Width; j++)
-                {
-                    if (i > this.Map.Height - 5)
-                    {
-                        this.Map.Matrix[i, j] = '~'; 
-                    }
-                    else
-                    {
-                        this.Map.Matrix[i, j] = '.'; 
-                    }
-                }
-            }
-        }
+		private void ExitApplication()
+		{
+			IsRunning = false;
+			ConsoleRenderer.WriteLine("Good Bye! Do come again to play this great game!");
+		}
 
-        public void AddItem(IGameItem itemToBeAdded)
-        {
-            this.items.Add(itemToBeAdded);
-        }
+		private static void RenderSuccessMoveMessage(IKeyInfo commandKey)
+		{
+			ConsoleRenderer.WriteLine(
+				"Moved " +
+				commandKey.Key.ToString().ToLower().Substring(0, commandKey.Key.ToString().Length - 5));
+		}
 
-        public void AddEnemy(ICharacter enemyToBeAdded)
-        {
-            this.characters.Add(enemyToBeAdded);
-        }
-
-        public void RemoveItem(IGameItem itemToBeRemoved)
-        {
-            this.items.Remove(itemToBeRemoved);
-        }
-
-        public void RemoveEnemy(ICharacter enemyToBeRemoved)
-        {
-            this.characters.Remove(enemyToBeRemoved);
-        }
-    }
+		private void InitializeMap()
+		{
+			for (var i = 0; i < Map.Height; i++)
+			for (var j = 0; j < Map.Width; j++)
+				if (i > Map.Height - 5)
+					Map.Matrix[i, j] = '~';
+				else
+					Map.Matrix[i, j] = '.';
+		}
+	}
 }

@@ -1,12 +1,9 @@
-﻿namespace RPGArmeni.Exceptions
-{
-    using System;
+﻿using System;
 
-    public class BackPackFullException : Exception
-    {
-        public BackPackFullException(string message)
-            : base(message)
-        {   
-        }
-    }
+namespace RPGArmeni.Exceptions
+{
+	public class BackPackFullException : Exception
+	{
+		public BackPackFullException(string message) : base(message) { }
+	}
 }

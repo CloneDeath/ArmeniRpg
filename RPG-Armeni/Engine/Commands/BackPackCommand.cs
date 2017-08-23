@@ -1,18 +1,16 @@
-﻿namespace RPGArmeni.Engine.Commands
+﻿using RPGArmeni.Interfaces;
+
+namespace RPGArmeni.Engine.Commands
 {
-    using Interfaces;
-    using System;
+	public class BackPackCommand : GameCommand
+	{
+		public BackPackCommand(IGameEngine engine) : base(engine)
+		{
+		}
 
-    public class BackPackCommand : GameCommand
-    {
-        public BackPackCommand(IGameEngine engine)
-            : base(engine)
-        {
-        }
-
-        public override void Execute()
-        {
-            this.Engine.Player.Inventory.BackPack.ListItems();
-        }
-    }
+		public override void Execute()
+		{
+			Engine.Player.Inventory.BackPack.ListItems();
+		}
+	}
 }

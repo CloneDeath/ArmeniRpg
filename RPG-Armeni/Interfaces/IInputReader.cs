@@ -1,7 +1,7 @@
 ﻿namespace RPGArmeni.Interfaces
 {
-    public interface IInputReader
-    {
-        string ReadLine();
-    }
+	public interface IInputReader
+	{
+		string ReadLine();
+	}
 }
