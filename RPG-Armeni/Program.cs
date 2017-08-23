@@ -6,7 +6,7 @@ using RPGArmeni.Interfaces;
 
 namespace RPGArmeni
 {
-	public class ArmeniMainProject
+	public class Program
 	{
 		public static void Main()
 		{
