@@ -90,10 +90,6 @@ namespace RPGArmeni.Engine.Commands
 
 		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			ConsoleRenderer.WriteLine(
-				"Moved " +
-				keyInfo.Key.ToString().ToLower().Substring(0, keyInfo.Key.ToString().Length - 5));
-
 			MovePlayer(gameEngine, keyInfo);
 			PrintMap(gameEngine, keyInfo);
 		}

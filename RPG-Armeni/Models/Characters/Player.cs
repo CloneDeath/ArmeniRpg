@@ -11,8 +11,6 @@ namespace RPGArmeni.Models.Characters
 {
 	public class Player : Character, IPlayer
 	{
-		private const int PlayerStartingX = 0;
-		private const int PlayerStartingY = 0;
 		private const char DefaultPlayerSymbol = 'P';
 		private const char DefaultEmptyMapSybmol = '.';
 		private int defensiveBonus;

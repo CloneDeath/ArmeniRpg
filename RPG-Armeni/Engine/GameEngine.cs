@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RPGArmeni.Engine.Commands;
 using RPGArmeni.Engine.Factories;
 using RPGArmeni.Interfaces;
@@ -11,8 +12,6 @@ namespace RPGArmeni.Engine
 	{
 		public const int MapHeight = 20;
 		public const int MapWidth = 50;
-		private const int DefaultNumberOfEnemies = 20;
-		private const int DefaultNumberOfItems = 20;
 
 		private readonly IList<IGameObject> _characters;
 		private readonly IList<IGameItem> _items;
@@ -25,8 +24,6 @@ namespace RPGArmeni.Engine
 			_items = new List<IGameItem>();
 			Map = new Map(MapHeight, MapWidth);
 			InitializeMap();
-			NumberOfEnemies = DefaultNumberOfEnemies;
-			NumberOfItems = DefaultNumberOfItems;
 		}
 
 		public void RegisterCommand(ICommand command)
@@ -42,11 +39,12 @@ namespace RPGArmeni.Engine
 
 		public IMap Map { get; }
 
-		public int NumberOfItems { get; }
-
-		public int NumberOfEnemies { get; }
+		public int NumberOfItems => 20;
+		public int NumberOfEnemies => 20;
 
 		public bool IsRunning { get; set; }
+
+		private string _status = string.Empty;
 
 		public virtual void Run()
 		{
@@ -66,8 +64,19 @@ namespace RPGArmeni.Engine
 			{
 				IKeyInfo commandKey = new KeyInfo();
 
+				ConsoleRenderer.ResetColor();
 				ConsoleRenderer.Clear();
-				_commandFactory.Execute(this, commandKey);
+				Console.WriteLine(_status);
+				_status = string.Empty;
+				
+				try
+				{
+					_commandFactory.Execute(this, commandKey);
+				}
+				catch (Exception ex)
+				{
+					_status = ex.Message;
+				}
 
 				if (_characters.Count == 0)
 				{

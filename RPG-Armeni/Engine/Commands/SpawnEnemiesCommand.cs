@@ -3,18 +3,14 @@ using RPGArmeni.Interfaces;
 
 namespace RPGArmeni.Engine.Commands
 {
-	public class SpawnEnemiesCommand : GameCommand
+	public class SpawnEnemiesCommand
 	{
-		public SpawnEnemiesCommand(IGameEngine engine) : base(engine)
+		public void Execute(IGameEngine engine)
 		{
-		}
-
-		public override void Execute()
-		{
-			for (var i = 0; i < Engine.NumberOfEnemies; i++)
+			for (var i = 0; i < engine.NumberOfEnemies; i++)
 			{
 				var enemy = CharacterFactory.Instance.CreateCharacter();
-				Engine.AddEnemy(enemy);
+				engine.AddEnemy(enemy);
 			}
 		}
 	}

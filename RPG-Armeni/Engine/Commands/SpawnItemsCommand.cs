@@ -3,18 +3,14 @@ using RPGArmeni.Interfaces;
 
 namespace RPGArmeni.Engine.Commands
 {
-	public class SpawnItemsCommand : GameCommand
+	public class SpawnItemsCommand
 	{
-		public SpawnItemsCommand(IGameEngine engine) : base(engine)
+		public void Execute(IGameEngine engine)
 		{
-		}
-
-		public override void Execute()
-		{
-			for (var i = 0; i < Engine.NumberOfItems; i++)
+			for (var i = 0; i < engine.NumberOfItems; i++)
 			{
 				var newItem = ItemFactory.Instance.CreateItem();
-				Engine.AddItem(newItem);
+				engine.AddItem(newItem);
 			}
 		}
 	}
