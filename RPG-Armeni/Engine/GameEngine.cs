@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RPGArmeni.Engine.Commands;
 using RPGArmeni.Engine.Factories;
 using RPGArmeni.Interfaces;
@@ -52,7 +51,8 @@ namespace RPGArmeni.Engine
 		public virtual void Run()
 		{
 			IsRunning = true;
-			Player = PlayerFactory.Instance.CreatePlayer();
+			Player = new PlayerFactory().CreatePlayer();
+			Map.Matrix[Player.Position.X, Player.Position.Y] = Player.ObjectSymbol;
 			Player.Engine = this;
 
 			IGameCommand spawnEnemies = new SpawnEnemiesCommand(this);

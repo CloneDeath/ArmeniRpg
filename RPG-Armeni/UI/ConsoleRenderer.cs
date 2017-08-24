@@ -36,7 +36,8 @@ namespace RPGArmeni.UI
 
 		public static void ResetColor()
 		{
-			Console.ResetColor();
+			Console.BackgroundColor = ConsoleColor.Black;
+			Console.ForegroundColor = ConsoleColor.White;
 		}
 	}
 }
