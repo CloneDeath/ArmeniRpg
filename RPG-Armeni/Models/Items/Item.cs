@@ -1,16 +1,20 @@
-﻿using RPGArmeni.Interfaces;
+﻿using System;
+using RPGArmeni.Interfaces;
 
 namespace RPGArmeni.Models.Items
 {
-	public abstract class Item : GameObject, IGameItem
+	public abstract class Item : IGameItem
 	{
-		protected Item(Position position, char itemSymbol)
-			: base(position, itemSymbol)
+		protected Item()
 		{
 			ItemState = ItemState.Available;
 		}
+		
+		public abstract char Symbol { get; }
+		public abstract ConsoleColor Color { get; }
 
 		public ItemState ItemState { get; set; }
+		public Position Position { get; set; }
 
 		public override string ToString()
 		{

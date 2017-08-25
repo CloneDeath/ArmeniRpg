@@ -9,12 +9,15 @@ namespace RPGArmeni.Interfaces
 		IPlayer Player { get; }
 		IMap Map { get; }
 		bool IsRunning { get; set; }
-		IEnumerable<IGameObject> Characters { get; }
+		IEnumerable<IEntity> Entities { get; }
 		IEnumerable<IGameItem> Items { get; }
-		void AddItem(IGameItem itemToBeAdded);
 		void AddEnemy(ICharacter enemyToBeAdded);
-		void RemoveItem(IGameItem itemToBeRemoved);
 		void RemoveEnemy(ICharacter enemyToBeRemoved);
+		void AddItem(IGameItem itemToBeAdded);
+		void RemoveItem(IGameItem itemToBeRemoved);
 		void Run();
+		bool IsEmpty(Position position);
+		IEntity GetEntityAtPosition(Position position);
+		void SetStatus(string status);
 	}
 }

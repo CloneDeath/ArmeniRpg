@@ -2,7 +2,6 @@
 using System.Text;
 using RPGArmeni.Engine;
 using RPGArmeni.Engine.Commands;
-using RPGArmeni.Engine.Factories;
 using RPGArmeni.Interfaces;
 using RPGArmeni.UI;
 
@@ -18,9 +17,6 @@ namespace RPGArmeni
 			ConsoleRenderer.Clear();
 
 			var engine = GetGameEngine();
-			
-			ItemFactory.Instance.Engine = engine;
-			CharacterFactory.Instance.Engine = engine;
 
 			engine.Run();
 		}
@@ -29,7 +25,6 @@ namespace RPGArmeni
 		{
 			var engine = new GameEngine();
 			engine.RegisterCommand(new HelpCommand());
-			engine.RegisterCommand(new PrintMapCommand());
 			engine.RegisterCommand(new MovePlayerCommand());
 			engine.RegisterCommand(new PlayerStatusCommand());
 			engine.RegisterCommand(new HealCommand());

@@ -4,8 +4,7 @@ namespace RPGArmeni.Models.Items.ArmorItems
 {
 	public abstract class ArmorItem : Item, IArmor
 	{
-		protected ArmorItem(Position position, char itemSymbol, int defenceBonus)
-			: base(position, itemSymbol)
+		protected ArmorItem(int defenceBonus)
 		{
 			DefenceBonus = defenceBonus;
 		}

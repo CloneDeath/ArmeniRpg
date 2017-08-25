@@ -15,5 +15,12 @@ namespace RPGArmeni.Engine.Factories
 		{
 			return RandomSource.Next(start, end);
 		}
+
+		public static Position GeneratePosition(int width, int height)
+		{
+			var y = GenerateNumber(0, width);
+			var x = GenerateNumber(0, height);
+			return new Position(x, y);
+		}
 	}
 }

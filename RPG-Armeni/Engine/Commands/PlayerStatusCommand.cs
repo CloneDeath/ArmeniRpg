@@ -17,7 +17,7 @@ namespace RPGArmeni.Engine.Commands
 			ConsoleRenderer.WriteLine(gameEngine.Player.ToString());
 			ConsoleRenderer.WriteLine(
 				"Number of enemies left: {0}",
-				gameEngine.Characters.Count());
+				gameEngine.Entities.Count());
 		}
 	}
 }

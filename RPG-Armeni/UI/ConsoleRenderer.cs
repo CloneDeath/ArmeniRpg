@@ -4,6 +4,12 @@ namespace RPGArmeni.UI
 {
 	public static class ConsoleRenderer
 	{
+		public static void WriteCharacter(Position position, char character)
+		{
+			Console.SetCursorPosition(position.X, position.Y);
+			Console.Write(character);
+		}
+		
 		public static void WriteLine()
 		{
 			Console.WriteLine();

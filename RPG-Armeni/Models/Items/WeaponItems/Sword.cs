@@ -1,4 +1,5 @@
-﻿using RPGArmeni.Attributes;
+﻿using System;
+using RPGArmeni.Attributes;
 
 namespace RPGArmeni.Models.Items.WeaponItems
 {
@@ -6,11 +7,13 @@ namespace RPGArmeni.Models.Items.WeaponItems
 	[Item]
 	public class Sword : WeaponItem
 	{
-		private const char SwardSymbol = 'S';
 		private const int SwardAttackBonus = 10;
 
-		public Sword(Position position) : base(position, SwardSymbol, SwardAttackBonus)
+		public Sword(Position position) : base(position, SwardAttackBonus)
 		{
 		}
+
+		public override char Symbol => 'S';
+		public override ConsoleColor Color => ConsoleColor.DarkCyan;
 	}
 }

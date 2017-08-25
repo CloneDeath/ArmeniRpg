@@ -17,11 +17,7 @@ namespace RPGArmeni.Engine.Factories
 		{
 			var name = GetPlayerName();
 			var playerRace = GetPlayerRace();
-			IPosition startingPosition = new Position(0, 0);
-			
-			const char playerSymbol = 'P';
-			
-			return new Player(startingPosition, playerSymbol, name, playerRace);
+			return new Player(name, playerRace);
 		}
 
 		protected virtual string GetPlayerName()

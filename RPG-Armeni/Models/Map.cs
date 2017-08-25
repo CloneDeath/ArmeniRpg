@@ -4,16 +4,22 @@ namespace RPGArmeni.Models
 {
 	public class Map : IMap
 	{
-		public Map(int height, int width)
+		public Map(int width, int height)
 		{
-			Height = height;
 			Width = width;
-			Matrix = new char[Height, Width];
+			Height = height;
+			_matrix = new ITile[Width, Height];
 		}
 
-		public int Height { get; }
 		public int Width { get; }
+		public int Height { get; }
 
-		public char[,] Matrix { get; }
+		private readonly ITile[,] _matrix;
+
+		public ITile this[int x, int y]
+		{
+			get => _matrix[x, y];
+			set => _matrix[x, y] = value;
+		}
 	}
 }

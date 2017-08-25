@@ -2,7 +2,7 @@
 
 namespace RPGArmeni.Interfaces
 {
-	public interface IGameItem : IGameObject
+	public interface IGameItem : IEntity
 	{
 		ItemState ItemState { get; set; }
 	}

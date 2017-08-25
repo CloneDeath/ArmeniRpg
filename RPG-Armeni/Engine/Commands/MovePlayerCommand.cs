@@ -41,8 +41,7 @@ namespace RPGArmeni.Engine.Commands
 
 				if (gameEngine.Player.Health < 150 && gameEngine.Player.Inventory.BackPack.SlotList.Any(x =>
 					    x.GameItem is HealthPotion
-					    || x.GameItem is
-						    HealthBonusPotion))
+					    || x.GameItem is HealthBonusPotion))
 				{
 					try
 					{
@@ -75,7 +74,7 @@ namespace RPGArmeni.Engine.Commands
 		private ICharacter FindEnemy(IGameEngine gameEngine)
 		{
 			return gameEngine
-				.Characters
+				.Entities
 				.FirstOrDefault(x => x.Position.X == gameEngine.Player.Position.X
 				                     && x.Position.Y == gameEngine.Player.Position.Y) as ICharacter;
 		}
@@ -91,7 +90,6 @@ namespace RPGArmeni.Engine.Commands
 		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
 			MovePlayer(gameEngine, keyInfo);
-			PrintMap(gameEngine, keyInfo);
 		}
 
 		private void MovePlayer(IGameEngine gameEngine, IKeyInfo keyInfo)
@@ -108,11 +106,6 @@ namespace RPGArmeni.Engine.Commands
 
 			var currentItem = FindItem(gameEngine);
 			if (currentItem != null) CollectItem(gameEngine, currentItem);
-		}
-
-		private void PrintMap(IGameEngine gameEngine, IKeyInfo keyInfo)
-		{
-			new PrintMapCommand().Execute(gameEngine, keyInfo);
 		}
 	}
 }

@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RPGArmeni.Engine.Commands;
 using RPGArmeni.Engine.Factories;
 using RPGArmeni.Interfaces;
 using RPGArmeni.Models;
+using RPGArmeni.Models.Tiles;
 using RPGArmeni.UI;
 
 namespace RPGArmeni.Engine
 {
 	public class GameEngine : IGameEngine
 	{
-		public const int MapHeight = 20;
-		public const int MapWidth = 50;
-
-		private readonly IList<IGameObject> _characters;
+		private readonly IList<IEntity> _characters;
 		private readonly IList<IGameItem> _items;
 		
 		private readonly CommandFactory _commandFactory = new CommandFactory();
 		
 		public GameEngine()
 		{
-			_characters = new List<IGameObject>();
+			_characters = new List<IEntity>();
 			_items = new List<IGameItem>();
-			Map = new Map(MapHeight, MapWidth);
+			Map = new Map(50, 20);
 			InitializeMap();
 		}
 
@@ -31,7 +30,7 @@ namespace RPGArmeni.Engine
 			_commandFactory.RegisterCommand(command);
 		}
 
-		public IEnumerable<IGameObject> Characters => _characters;
+		public IEnumerable<IEntity> Entities => _characters;
 
 		public IEnumerable<IGameItem> Items => _items;
 
@@ -44,21 +43,18 @@ namespace RPGArmeni.Engine
 
 		public bool IsRunning { get; set; }
 
-		private string _status = string.Empty;
+		private string _status = "Press ? for Help.";
+		
+		private readonly MapRenderer _renderer = new MapRenderer();
 
 		public virtual void Run()
 		{
 			IsRunning = true;
 			Player = new PlayerFactory().CreatePlayer();
-			Map.Matrix[Player.Position.X, Player.Position.Y] = Player.ObjectSymbol;
 			Player.Engine = this;
 
-			IGameCommand spawnEnemies = new SpawnEnemiesCommand(this);
-			spawnEnemies.Execute();
-
-			IGameCommand spawnItems = new SpawnItemsCommand(this);
-			spawnItems.Execute();
-			ConsoleRenderer.WriteLine("Press ? to get playing instructions.");
+			new SpawnEnemiesCommand().Execute(this);
+			new SpawnItemsCommand().Execute(this);
 
 			while (IsRunning)
 			{
@@ -69,14 +65,8 @@ namespace RPGArmeni.Engine
 				Console.WriteLine(_status);
 				_status = string.Empty;
 				
-				try
-				{
-					_commandFactory.Execute(this, commandKey);
-				}
-				catch (Exception ex)
-				{
-					_status = ex.Message;
-				}
+				_commandFactory.Execute(this, commandKey);
+				_renderer.Render(this, new Position(0, 1));
 
 				if (_characters.Count == 0)
 				{
@@ -84,6 +74,25 @@ namespace RPGArmeni.Engine
 					ConsoleRenderer.WriteLine("All your enemies are dead. Congratulations! You are the only one left on earth.");
 				}
 			}
+		}
+
+		public bool IsEmpty(Position position)
+		{
+			return Entities.All(c => c.Position != position)
+			       && Items.All(i => i.Position != position)
+			       && Player.Position != position;
+		}
+
+		public IEntity GetEntityAtPosition(Position position)
+		{
+			if (Player.Position == position) return Player;
+			return Entities.FirstOrDefault(c => c.Position == position)
+			       ?? Items.FirstOrDefault(c => c.Position == position);
+		}
+
+		public void SetStatus(string status)
+		{
+			_status = status;
 		}
 
 		public void AddItem(IGameItem itemToBeAdded)
@@ -108,12 +117,16 @@ namespace RPGArmeni.Engine
 		
 		private void InitializeMap()
 		{
-			for (var i = 0; i < Map.Height; i++)
-			for (var j = 0; j < Map.Width; j++)
-				if (i > Map.Height - 5)
-					Map.Matrix[i, j] = '~';
-				else
-					Map.Matrix[i, j] = '.';
+			for (var y = 0; y < Map.Height; y++)
+			{
+				for (var x = 0; x < Map.Width; x++)
+				{
+					if (y > Map.Height - 5)
+						Map[x, y] = new WaterTile();
+					else
+						Map[x, y] = new GrassTile();
+				}
+			}
 		}
 	}
 }

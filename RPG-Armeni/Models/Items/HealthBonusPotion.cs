@@ -1,20 +1,21 @@
-﻿using RPGArmeni.Attributes;
+﻿using System;
+using RPGArmeni.Attributes;
 
 namespace RPGArmeni.Models.Items
 {
 	[Item]
 	internal class HealthBonusPotion : Item
 	{
-		private const char HealthBonusPotionSymbol = 'B';
-
 		public HealthBonusPotion(Position position, HealthBonusPotionSize healthBonusPotionSize)
-			: base(position, HealthBonusPotionSymbol)
 		{
+			Position = position;
 			HealthBonusPotionSize = healthBonusPotionSize;
 		}
 
 		public int HealthBonus => (int) HealthBonusPotionSize;
 
 		public HealthBonusPotionSize HealthBonusPotionSize { get; set; }
+		public override char Symbol => 'B';
+		public override ConsoleColor Color => ConsoleColor.Blue;
 	}
 }

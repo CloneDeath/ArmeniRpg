@@ -1,4 +1,5 @@
-﻿using RPGArmeni.Attributes;
+﻿using System;
+using RPGArmeni.Attributes;
 
 namespace RPGArmeni.Models.Items.WeaponItems
 {
@@ -6,11 +7,13 @@ namespace RPGArmeni.Models.Items.WeaponItems
 	[Item]
 	public class Axe : WeaponItem
 	{
-		private const char AxeSymbol = 'A';
 		private const int AxeAttackBonus = 15;
 
-		public Axe(Position position) : base(position, AxeSymbol, AxeAttackBonus)
+		public Axe(Position position) : base(position, AxeAttackBonus)
 		{
 		}
+
+		public override char Symbol => 'A';
+		public override ConsoleColor Color => ConsoleColor.DarkCyan;
 	}
 }

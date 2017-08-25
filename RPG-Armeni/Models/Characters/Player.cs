@@ -11,46 +11,20 @@ namespace RPGArmeni.Models.Characters
 {
 	public class Player : Character, IPlayer
 	{
-		private const char DefaultPlayerSymbol = 'P';
-		private const char DefaultEmptyMapSybmol = '.';
-		private int defensiveBonus;
-		private string name;
+		private int _startHealth;
 
-		private int startHealth;
-
-		public Player(IPosition position, char objectSymbol, string name, IRace race)
-			: base(position, objectSymbol, race.Damage, race.Health)
+		public Player(string name, IRace race) : base(race.Damage, race.Health)
 		{
 			Name = name;
 			Race = race;
 			Inventory = new Inventory();
-			startHealth = race.Health;
+			_startHealth = race.Health;
 		}
 
-		public string Name
-		{
-			get => name;
+		public string Name { get; set; }
 
-			private set
-			{
-				if (string.IsNullOrWhiteSpace(value))
-					throw new InvalidNameException("Name cannot be null, empty or whitespace.");
-
-				name = value;
-			}
-		}
-
-		public int DefensiveBonus
-		{
-			get => defensiveBonus;
-			private set
-			{
-				if (value < 0)
-					throw new ArgumentException("Player defensive bonus.", "Defensive bonus value cannot be negative.");
-				defensiveBonus = value;
-			}
-		}
-
+		public int DefensiveBonus { get; set; }
+		
 		public IRace Race { get; }
 
 		public IInventory Inventory { get; }
@@ -87,14 +61,15 @@ namespace RPGArmeni.Models.Characters
 				.SlotList
 				.FirstOrDefault(x => x.GameItem is HealthPotion);
 
-			if (healthPotionSlot == null)
+			var potion = healthPotionSlot?.GameItem as HealthPotion;
+
+			if (potion == null)
 				throw new NoHealthPotionsException("There are no health potions left in the backpack.");
 
-			var maximumHealthRestore = startHealth;
-			Health += (healthPotionSlot.GameItem as HealthPotion).HealthRestore;
-			ConsoleRenderer.WriteLine("You restored {0} health points using Health Potion!",
-				(healthPotionSlot.GameItem as HealthPotion).HealthRestore);
-			if (Health > maximumHealthRestore) //Healing potions only restore health to the player's current Health value.
+			var maximumHealthRestore = _startHealth;
+			Health += potion.HealthRestore;
+			ConsoleRenderer.WriteLine($"You restored {potion.HealthRestore} health points using Health Potion!");
+			if (Health > maximumHealthRestore)
 				Health = maximumHealthRestore;
 			Inventory.BackPack.RemoveItem(healthPotionSlot);
 		}
@@ -106,12 +81,12 @@ namespace RPGArmeni.Models.Characters
 				.SlotList
 				.FirstOrDefault(x => x.GameItem is HealthBonusPotion);
 
-			if (healthBonusPotionSlot == null)
+			var potion = healthBonusPotionSlot?.GameItem as HealthBonusPotion;
+			if (potion == null) 
 				throw new NoHealthBonusPotionsException("There are no health bonus potions left in the backpack.");
-			Health += (healthBonusPotionSlot.GameItem as HealthBonusPotion).HealthBonus;
-			ConsoleRenderer.WriteLine("You boosted your health with {0} points using Health Bonus Potion!",
-				(healthBonusPotionSlot.GameItem as HealthBonusPotion).HealthBonus);
-			startHealth += (healthBonusPotionSlot.GameItem as HealthBonusPotion).HealthBonus;
+			Health += potion.HealthBonus;
+			ConsoleRenderer.WriteLine($"You boosted your health with {potion.HealthBonus} points using Health Bonus Potion!");
+			_startHealth += potion.HealthBonus;
 			Inventory.BackPack.RemoveItem(healthBonusPotionSlot);
 		}
 
@@ -119,47 +94,40 @@ namespace RPGArmeni.Models.Characters
 		{
 			var output = new StringBuilder();
 			output.AppendLine("Player stats:");
-			output.AppendFormat("Health: {0}, Damage: {1}, Defensive Bonus: {2}", Health, Damage, DefensiveBonus);
+			output.AppendFormat($"Health: {Health}, Damage: {Damage}, Defensive Bonus: {DefensiveBonus}");
 			return output.ToString();
 		}
 
 		private void MoveLeft()
 		{
-			if (Position.Y - 1 < 0)
-				throw new ObjectOutOfBoundsException("You have reached the border of the map.");
-
-			ChangePlayerCoordinates(0, -1);
+			if (Position.X - 1 < 0) Engine.SetStatus("You have reached the border of the map.");
+			ChangePlayerCoordinates(-1, 0);
 		}
 
 		private void MoveRight()
 		{
-			if (Position.Y + 1 >= Engine.Map.Width)
-				throw new ObjectOutOfBoundsException("You have reached the border of the map.");
-
-			ChangePlayerCoordinates(0, 1);
+			if (Position.X + 1 >= Engine.Map.Width) Engine.SetStatus("You have reached the border of the map.");
+			ChangePlayerCoordinates(1, 0);
 		}
 
 		private void MoveDown()
 		{
-			if (Position.X + 1 >= Engine.Map.Height)
-				throw new ObjectOutOfBoundsException("You have reached the border of the map.");
-
-			ChangePlayerCoordinates(1, 0);
+			if (Position.Y + 1 >= Engine.Map.Height) Engine.SetStatus("You have reached the border of the map.");
+			ChangePlayerCoordinates(0, 1);
 		}
 
 		private void MoveUp()
 		{
-			if (Position.X - 1 < 0)
-				throw new ObjectOutOfBoundsException("You have reached the border of the map.");
-
-			ChangePlayerCoordinates(-1, 0);
+			if (Position.Y - 1 < 0) Engine.SetStatus("You have reached the border of the map.");
+			ChangePlayerCoordinates(0, -1);
 		}
 
 		private void ChangePlayerCoordinates(int x, int y)
 		{
-			Engine.Map.Matrix[Position.X, Position.Y] = DefaultEmptyMapSybmol;
 			Position = new Position(Position.X + x, Position.Y + y);
-			Engine.Map.Matrix[Position.X, Position.Y] = DefaultPlayerSymbol;
 		}
+
+		public override char Symbol => '@';
+		public override ConsoleColor Color => ConsoleColor.White;
 	}
 }

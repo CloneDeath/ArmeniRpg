@@ -1,6 +1,6 @@
 ﻿namespace RPGArmeni.Interfaces
 {
-	public interface ICharacter : IGameObject, IAttack, IDestroyable
+	public interface ICharacter : IEntity, IAttack, IDestroyable
 	{
 	}
 }
