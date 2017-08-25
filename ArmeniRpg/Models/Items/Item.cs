@@ -1,7 +1,7 @@
 ﻿using System;
-using RPGArmeni.Interfaces;
+using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Models.Items
+namespace ArmeniRpg.Models.Items
 {
 	public abstract class Item : IGameItem
 	{

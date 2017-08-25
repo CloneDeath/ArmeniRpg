@@ -1,6 +1,6 @@
-﻿using RPGArmeni.Interfaces;
+﻿using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Models
+namespace ArmeniRpg.Models
 {
 	public class Map : IMap
 	{

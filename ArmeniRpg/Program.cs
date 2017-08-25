@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Text;
-using RPGArmeni.Engine;
-using RPGArmeni.Engine.Commands;
-using RPGArmeni.Interfaces;
-using RPGArmeni.UI;
+using ArmeniRpg.Engine;
+using ArmeniRpg.Engine.Commands;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni
+namespace ArmeniRpg
 {
 	public class Program
 	{

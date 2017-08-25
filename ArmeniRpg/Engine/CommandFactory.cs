@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using RPGArmeni.Interfaces;
+using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Engine
+namespace ArmeniRpg.Engine
 {
 	public class CommandFactory
 	{

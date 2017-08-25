@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using RPGArmeni.UI;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Engine.Commands
+namespace ArmeniRpg.Engine.Commands
 {
 	public static class GameStateScreens
 	{

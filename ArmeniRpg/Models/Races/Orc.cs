@@ -1,6 +1,6 @@
-﻿using RPGArmeni.Interfaces;
+﻿using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Models.Characters
+namespace ArmeniRpg.Models.Races
 {
 	public class Orc : IRace
 	{

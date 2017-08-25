@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using RPGArmeni.Attributes;
-using RPGArmeni.Engine.Factories;
-using RPGArmeni.Interfaces;
-using RPGArmeni.Models.Items;
+using ArmeniRpg.Attributes;
+using ArmeniRpg.Engine.Factories;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.Models.Items;
 
-namespace RPGArmeni.Engine.Commands
+namespace ArmeniRpg.Engine.Commands
 {
 	public class SpawnItemsCommand
 	{

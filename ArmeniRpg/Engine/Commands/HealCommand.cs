@@ -1,7 +1,7 @@
 ﻿using System;
-using RPGArmeni.Interfaces;
+using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Engine.Commands
+namespace ArmeniRpg.Engine.Commands
 {
 	public class HealCommand : ICommand
 	{

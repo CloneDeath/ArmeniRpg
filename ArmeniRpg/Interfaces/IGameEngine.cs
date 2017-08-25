@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RPGArmeni.Interfaces
+namespace ArmeniRpg.Interfaces
 {
 	public interface IGameEngine
 	{

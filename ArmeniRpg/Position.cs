@@ -1,4 +1,4 @@
-﻿namespace RPGArmeni
+﻿namespace ArmeniRpg
 {
 	public struct Position
 	{

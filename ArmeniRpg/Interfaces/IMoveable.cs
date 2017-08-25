@@ -1,4 +1,4 @@
-﻿namespace RPGArmeni.Interfaces
+﻿namespace ArmeniRpg.Interfaces
 {
 	public interface IMoveable
 	{

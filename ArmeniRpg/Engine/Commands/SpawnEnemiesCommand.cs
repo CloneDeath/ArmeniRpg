@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using RPGArmeni.Engine.Factories;
-using RPGArmeni.Interfaces;
-using RPGArmeni.Models.Characters;
+﻿using ArmeniRpg.Engine.Factories;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.Models.Enemies;
 
-namespace RPGArmeni.Engine.Commands
+namespace ArmeniRpg.Engine.Commands
 {
 	public class SpawnEnemiesCommand
 	{

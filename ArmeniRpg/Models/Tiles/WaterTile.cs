@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPGArmeni.Models.Tiles
+namespace ArmeniRpg.Models.Tiles
 {
 	public class WaterTile : ITile
 	{

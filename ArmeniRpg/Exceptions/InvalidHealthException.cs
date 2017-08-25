@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPGArmeni.Exceptions
+namespace ArmeniRpg.Exceptions
 {
 	public class InvalidHealthException : Exception
 	{

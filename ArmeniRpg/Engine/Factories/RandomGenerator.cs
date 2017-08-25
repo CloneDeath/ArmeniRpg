@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPGArmeni.Engine.Factories
+namespace ArmeniRpg.Engine.Factories
 {
 	public static class RandomGenerator
 	{

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RPGArmeni.Engine.Commands;
-using RPGArmeni.Engine.Factories;
-using RPGArmeni.Interfaces;
-using RPGArmeni.Models;
-using RPGArmeni.Models.Tiles;
-using RPGArmeni.UI;
+using ArmeniRpg.Engine.Commands;
+using ArmeniRpg.Engine.Factories;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.Models;
+using ArmeniRpg.Models.Tiles;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Engine
+namespace ArmeniRpg.Engine
 {
 	public class GameEngine : IGameEngine
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
-using RPGArmeni.Attributes;
+using ArmeniRpg.Attributes;
 
-namespace RPGArmeni.Models.Items.WeaponItems
+namespace ArmeniRpg.Models.Items.WeaponItems
 {
 	[Weapon]
 	[Item]

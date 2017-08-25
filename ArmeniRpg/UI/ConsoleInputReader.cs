@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPGArmeni.UI
+namespace ArmeniRpg.UI
 {
 	public static class ConsoleInputReader
 	{

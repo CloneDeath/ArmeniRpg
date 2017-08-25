@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using RPGArmeni.Interfaces;
-using RPGArmeni.Models.Characters;
-using RPGArmeni.UI;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.Models.Characters;
+using ArmeniRpg.Models.Races;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Engine.Factories
+namespace ArmeniRpg.Engine.Factories
 {
 	public class PlayerFactory
 	{

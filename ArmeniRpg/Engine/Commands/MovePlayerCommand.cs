@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using RPGArmeni.Exceptions;
-using RPGArmeni.Interfaces;
-using RPGArmeni.Models.Items;
-using RPGArmeni.UI;
+using ArmeniRpg.Exceptions;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.Models.Items;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Engine.Commands
+namespace ArmeniRpg.Engine.Commands
 {
 	public class MovePlayerCommand : ICommand
 	{

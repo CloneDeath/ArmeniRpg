@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPGArmeni.Interfaces
+namespace ArmeniRpg.Interfaces
 {
 	public interface IKeyInfo
 	{

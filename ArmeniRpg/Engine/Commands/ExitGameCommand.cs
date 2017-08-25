@@ -1,8 +1,8 @@
 ﻿using System;
-using RPGArmeni.Interfaces;
-using RPGArmeni.UI;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Engine.Commands
+namespace ArmeniRpg.Engine.Commands
 {
 	public class ExitGameCommand : ICommand
 	{

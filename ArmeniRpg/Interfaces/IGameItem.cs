@@ -1,6 +1,6 @@
-﻿using RPGArmeni.Models.Items;
+﻿using ArmeniRpg.Models.Items;
 
-namespace RPGArmeni.Interfaces
+namespace ArmeniRpg.Interfaces
 {
 	public interface IGameItem : IEntity
 	{

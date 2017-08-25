@@ -1,8 +1,8 @@
 ﻿using System;
-using RPGArmeni.Interfaces;
-using RPGArmeni.UI;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Engine
+namespace ArmeniRpg.Engine
 {
 	public class MapRenderer
 	{

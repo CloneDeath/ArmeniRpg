@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using RPGArmeni.Exceptions;
-using RPGArmeni.Interfaces;
-using RPGArmeni.Models.Containers;
-using RPGArmeni.Models.Items;
-using RPGArmeni.UI;
+using ArmeniRpg.Exceptions;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.Models.Containers;
+using ArmeniRpg.Models.Items;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Models.Characters
+namespace ArmeniRpg.Models.Characters
 {
 	public class Player : Character, IPlayer
 	{

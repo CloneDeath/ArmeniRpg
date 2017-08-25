@@ -1,6 +1,6 @@
-﻿using RPGArmeni.Interfaces;
+﻿using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Models.Items.WeaponItems
+namespace ArmeniRpg.Models.Items.WeaponItems
 {
 	public abstract class WeaponItem : Item, IWeapon
 	{

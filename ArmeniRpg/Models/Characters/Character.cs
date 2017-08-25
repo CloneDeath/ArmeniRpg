@@ -1,7 +1,7 @@
 ﻿using System;
-using RPGArmeni.Interfaces;
+using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Models.Characters
+namespace ArmeniRpg.Models.Characters
 {
 	public abstract class Character : ICharacter
 	{

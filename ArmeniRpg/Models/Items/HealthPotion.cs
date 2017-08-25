@@ -1,7 +1,7 @@
 ﻿using System;
-using RPGArmeni.Attributes;
+using ArmeniRpg.Attributes;
 
-namespace RPGArmeni.Models.Items
+namespace ArmeniRpg.Models.Items
 {
 	[Item]
 	public class HealthPotion : Item

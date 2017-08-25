@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPGArmeni.Models
+namespace ArmeniRpg.Models
 {
 	public interface ITile
 	{

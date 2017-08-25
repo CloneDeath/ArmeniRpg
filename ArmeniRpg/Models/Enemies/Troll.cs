@@ -1,6 +1,7 @@
 ﻿using System;
+using ArmeniRpg.Models.Characters;
 
-namespace RPGArmeni.Models.Characters
+namespace ArmeniRpg.Models.Enemies
 {
 	public class Troll : Character
 	{

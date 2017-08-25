@@ -1,6 +1,6 @@
-﻿using RPGArmeni.Interfaces;
+﻿using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Engine
+namespace ArmeniRpg.Engine
 {
 	public interface ICommand
 	{

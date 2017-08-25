@@ -1,4 +1,4 @@
-﻿namespace RPGArmeni.Models.Items
+﻿namespace ArmeniRpg.Models.Items
 {
 	public enum HealthBonusPotionSize
 	{

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using RPGArmeni.Exceptions;
-using RPGArmeni.Interfaces;
+using ArmeniRpg.Exceptions;
+using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.Models.Containers
+namespace ArmeniRpg.Models.Containers
 {
 	public class Inventory : IInventory
 	{

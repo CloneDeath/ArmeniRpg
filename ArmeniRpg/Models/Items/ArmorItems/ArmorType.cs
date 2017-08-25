@@ -1,4 +1,4 @@
-﻿namespace RPGArmeni.Models.Items.ArmorItems
+﻿namespace ArmeniRpg.Models.Items.ArmorItems
 {
 	public enum ArmorType
 	{

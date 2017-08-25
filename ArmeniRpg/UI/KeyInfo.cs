@@ -1,7 +1,7 @@
 ﻿using System;
-using RPGArmeni.Interfaces;
+using ArmeniRpg.Interfaces;
 
-namespace RPGArmeni.UI
+namespace ArmeniRpg.UI
 {
 	public class KeyInfo : IKeyInfo
 	{

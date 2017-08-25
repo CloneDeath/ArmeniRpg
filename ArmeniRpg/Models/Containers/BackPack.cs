@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RPGArmeni.Exceptions;
-using RPGArmeni.Interfaces;
-using RPGArmeni.UI;
+using ArmeniRpg.Exceptions;
+using ArmeniRpg.Interfaces;
+using ArmeniRpg.UI;
 
-namespace RPGArmeni.Models.Containers
+namespace ArmeniRpg.Models.Containers
 {
 	public class BackPack : IContainer
 	{
