@@ -6,6 +6,7 @@ namespace RPGArmeni.Models.Tiles
 	{
 		public char Symbol => '~';
 		public ConsoleColor Color => ConsoleColor.DarkBlue;
-		public ConsoleColor DetailColor => ConsoleColor.Blue;
+		public ConsoleColor DetailColor => ConsoleColor.Black;
+		public bool CanStandOn => false;
 	}
 }

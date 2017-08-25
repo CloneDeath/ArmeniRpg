@@ -7,5 +7,6 @@ namespace RPGArmeni.Models
 		char Symbol { get; }
 		ConsoleColor Color { get; }
 		ConsoleColor DetailColor { get; }
+		bool CanStandOn { get; }
 	}
 }

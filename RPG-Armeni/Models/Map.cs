@@ -16,10 +16,10 @@ namespace RPGArmeni.Models
 
 		private readonly ITile[,] _matrix;
 
-		public ITile this[int x, int y]
+		public ITile this[Position position]
 		{
-			get => _matrix[x, y];
-			set => _matrix[x, y] = value;
+			get => _matrix[position.X, position.Y];
+			set => _matrix[position.X, position.Y] = value;
 		}
 	}
 }

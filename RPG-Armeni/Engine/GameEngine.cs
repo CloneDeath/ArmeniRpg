@@ -78,6 +78,7 @@ namespace RPGArmeni.Engine
 
 		public bool IsEmpty(Position position)
 		{
+			if (!Map[position].CanStandOn) return false;
 			return Entities.All(c => c.Position != position)
 			       && Items.All(i => i.Position != position)
 			       && Player.Position != position;
@@ -121,10 +122,11 @@ namespace RPGArmeni.Engine
 			{
 				for (var x = 0; x < Map.Width; x++)
 				{
+					var position = new Position(x, y);
 					if (y > Map.Height - 5)
-						Map[x, y] = new WaterTile();
+						Map[position] = new WaterTile();
 					else
-						Map[x, y] = new GrassTile();
+						Map[position] = new GrassTile();
 				}
 			}
 		}

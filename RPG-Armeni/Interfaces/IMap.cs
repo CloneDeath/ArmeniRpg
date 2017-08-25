@@ -6,6 +6,6 @@ namespace RPGArmeni.Interfaces
 	{
 		int Width { get; }
 		int Height { get; }
-		ITile this[int x,int y] { get; set; }
+		ITile this[Position position] { get; set; }
 	}
 }

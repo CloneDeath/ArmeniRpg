@@ -15,7 +15,7 @@ namespace RPGArmeni.Engine
 				for (var y = 0; y < engine.Map.Height; y++)
 				{
 					var current = new Position(x, y);
-					var tile = engine.Map[x, y];
+					var tile = engine.Map[current];
 					var entity = engine.GetEntityAtPosition(current);
 					
 					ConsoleRenderer.BackgroundColor(tile.Color);
