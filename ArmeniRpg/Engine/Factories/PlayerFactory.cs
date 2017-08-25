@@ -23,17 +23,18 @@ namespace ArmeniRpg.Engine.Factories
 
 		protected virtual string GetPlayerName()
 		{
+			Console.SetCursorPosition(0, 0);
 			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine("Enter Player's Name: ");
-			Console.ResetColor();
+			Console.ForegroundColor = ConsoleColor.White;
 			return ConsoleInputReader.ReadLine();
 		}
 
 		private IRace GetPlayerRace()
 		{
 			Console.ForegroundColor = ConsoleColor.Green;
-			Console.WriteLine("Choose a race : ");
-			Console.ResetColor();
+			Console.WriteLine("Choose A Race: ");
+			Console.ForegroundColor = ConsoleColor.White;
 
 			for (var i = 0; i < AvailableRaces.Count; i++)
 			{
