@@ -58,15 +58,15 @@ namespace RPGArmeni.Engine
 
 			while (IsRunning)
 			{
-				IKeyInfo commandKey = new KeyInfo();
-
 				ConsoleRenderer.ResetColor();
 				ConsoleRenderer.Clear();
+				
 				Console.WriteLine(_status);
+				_renderer.Render(this, new Position(0, 1));
+				
 				_status = string.Empty;
 				
-				_commandFactory.Execute(this, commandKey);
-				_renderer.Render(this, new Position(0, 1));
+				_commandFactory.Execute(this, new KeyInfo());
 
 				if (_characters.Count == 0)
 				{

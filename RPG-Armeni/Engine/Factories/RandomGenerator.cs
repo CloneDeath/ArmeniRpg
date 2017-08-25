@@ -18,8 +18,8 @@ namespace RPGArmeni.Engine.Factories
 
 		public static Position GeneratePosition(int width, int height)
 		{
-			var y = GenerateNumber(0, width);
-			var x = GenerateNumber(0, height);
+			var y = GenerateNumber(0, height);
+			var x = GenerateNumber(0, width);
 			return new Position(x, y);
 		}
 	}

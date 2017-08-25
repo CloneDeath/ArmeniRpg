@@ -100,25 +100,41 @@ namespace RPGArmeni.Models.Characters
 
 		private void MoveLeft()
 		{
-			if (Position.X - 1 < 0) Engine.SetStatus("You have reached the border of the map.");
+			if (Position.X - 1 < 0)
+			{
+				Engine.SetStatus("You have reached the border of the map.");
+				return;
+			}
 			ChangePlayerCoordinates(-1, 0);
 		}
 
 		private void MoveRight()
 		{
-			if (Position.X + 1 >= Engine.Map.Width) Engine.SetStatus("You have reached the border of the map.");
+			if (Position.X + 1 >= Engine.Map.Width)
+			{
+				Engine.SetStatus("You have reached the border of the map.");
+				return;
+			}
 			ChangePlayerCoordinates(1, 0);
 		}
 
 		private void MoveDown()
 		{
-			if (Position.Y + 1 >= Engine.Map.Height) Engine.SetStatus("You have reached the border of the map.");
+			if (Position.Y + 1 >= Engine.Map.Height)
+			{
+				Engine.SetStatus("You have reached the border of the map.");
+				return;
+			}
 			ChangePlayerCoordinates(0, 1);
 		}
 
 		private void MoveUp()
 		{
-			if (Position.Y - 1 < 0) Engine.SetStatus("You have reached the border of the map.");
+			if (Position.Y - 1 < 0)
+			{
+				Engine.SetStatus("You have reached the border of the map.");
+				return;
+			}
 			ChangePlayerCoordinates(0, -1);
 		}
 
