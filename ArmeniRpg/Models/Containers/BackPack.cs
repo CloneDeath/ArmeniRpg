@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ArmeniRpg.Exceptions;
 using ArmeniRpg.Interfaces;
-using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Models.Containers
 {
@@ -43,16 +42,13 @@ namespace ArmeniRpg.Models.Containers
 			RemoveLastItemInternal();
 		}
 
-		public void ListItems()
+		public void ListItems(IGameEngine engine)
 		{
-			var fullSlots = SlotList.Where(x => !x.IsEmpty);
+			var fullSlots = SlotList.Where(x => !x.IsEmpty).ToList();
 			foreach (var currentSlot in fullSlots)
-				ConsoleRenderer.WriteLine(currentSlot.GameItem.ToString());
+				engine.SetStatus(currentSlot.GameItem.ToString());
 
-			ConsoleRenderer.ForegroundColor(ConsoleColor.Green);
-			ConsoleRenderer.WriteLine("Empty slots: {0}",
-				SlotList.Count() - fullSlots.Count());
-			ConsoleRenderer.ResetColor();
+			engine.SetStatus($"Empty slots: {SlotList.Count() - fullSlots.Count}");
 		}
 
 		private void RemoveLastItemInternal()

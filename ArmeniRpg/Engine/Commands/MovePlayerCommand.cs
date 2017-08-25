@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using ArmeniRpg.Exceptions;
 using ArmeniRpg.Interfaces;
 using ArmeniRpg.Models.Items;
-using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Engine.Commands
 {
@@ -13,49 +11,38 @@ namespace ArmeniRpg.Engine.Commands
 		{
 			currentItem.ItemState = ItemState.Collected;
 			gameEngine.Player.Inventory.BackPack.LootItem(currentItem);
-			ConsoleRenderer.WriteLine("{0} collected!", currentItem.GetType().Name);
+			gameEngine.SetStatus($"{currentItem.GetType().Name} collected!");
 		}
 
-		private void EnterBattle(IGameEngine gameEngine, ICharacter currentEnemy)
+		private void EnterBattle(IGameEngine engine, ICharacter currentEnemy)
 		{
-			ConsoleRenderer.WriteLine(
-				"An enemy {0} is approaching. Prepare for battle!",
-				currentEnemy.GetType().Name);
+			engine.SetStatus($"An enemy {currentEnemy.GetType().Name} is approaching. Prepare for battle!");
 			while (true)
 			{
-				gameEngine.Player.Attack(currentEnemy);
-				ConsoleRenderer.WriteLine("You smash the {0} for {1} damage!",
-					currentEnemy.GetType().Name, gameEngine.Player.Damage);
+				engine.Player.Attack(currentEnemy);
+				engine.SetStatus($"You smash the {currentEnemy.GetType().Name} for {engine.Player.Damage} damage!");
 
 				if (currentEnemy.Health <= 0)
 				{
-					ConsoleRenderer.WriteLine("Enemy killed!");
-					ConsoleRenderer.WriteLine("Health Remaining: {0}", gameEngine.Player.Health);
-					gameEngine.RemoveEnemy(currentEnemy);
+					engine.SetStatus("Enemy killed!");
+					engine.SetStatus($"Health Remaining: {engine.Player.Health}");
+					engine.RemoveEnemy(currentEnemy);
 					return;
 				}
 
-				currentEnemy.Attack(gameEngine.Player);
-				ConsoleRenderer.WriteLine("The {0} hits you for {1} damage!",
-					currentEnemy.GetType().Name, currentEnemy.Damage);
+				currentEnemy.Attack(engine.Player);
+				engine.SetStatus($"The {currentEnemy.GetType().Name} hits you for {currentEnemy.Damage} damage!");
 
-				if (gameEngine.Player.Health < 150 && gameEngine.Player.Inventory.BackPack.SlotList.Any(x =>
+				if (engine.Player.Health < 150 && engine.Player.Inventory.BackPack.SlotList.Any(x =>
 					    x.GameItem is HealthPotion
 					    || x.GameItem is HealthBonusPotion))
 				{
-					try
-					{
-						gameEngine.Player.SelfHeal();
-					}
-					catch (NoHealthPotionsException ex)
-					{
-						ConsoleRenderer.WriteLine(ex.Message);
-					}
+					engine.Player.SelfHeal(engine);
 				}
 
-				if (gameEngine.Player.Health <= 0)
+				if (engine.Player.Health <= 0)
 				{
-					gameEngine.IsRunning = false;
+					engine.IsRunning = false;
 					GameStateScreens.ShowGameOverScreen();
 					return;
 				}

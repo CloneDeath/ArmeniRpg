@@ -17,7 +17,9 @@ namespace ArmeniRpg.Engine.Commands
 		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
 			var helpInfo = File.ReadAllText("./UI/Utility/HelpInfo.txt");
-			ConsoleRenderer.WriteLine(helpInfo);
+			Console.ResetColor();
+			Console.Clear();
+			Console.WriteLine(helpInfo);
 		}
 	}
 }

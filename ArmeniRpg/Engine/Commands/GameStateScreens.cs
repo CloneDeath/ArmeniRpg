@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Engine.Commands
 {
@@ -8,7 +7,8 @@ namespace ArmeniRpg.Engine.Commands
 	{
 		public static void ShowGameOverScreen()
 		{
-			ConsoleRenderer.Clear();
+			Console.ResetColor();
+			Console.Clear();
 
 			const int skullHeight = 19;
 			var centerPadding = new string(' ', Console.BufferWidth / 4);
@@ -19,19 +19,17 @@ namespace ArmeniRpg.Engine.Commands
 			Console.ForegroundColor = ConsoleColor.Gray;
 			for (var i = 0; i < skullHeight; i++)
 			{
-				ConsoleRenderer.Write(centerPadding);
-				ConsoleRenderer.WriteLine(deathScreen[i]);
+				Console.Write(centerPadding);
+				Console.WriteLine(deathScreen[i]);
 			}
 			Console.ForegroundColor = ConsoleColor.Red;
 			for (var i = skullHeight; i < deathScreen.Length; i++)
 			{
-				ConsoleRenderer.Write(centerPadding);
-				ConsoleRenderer.WriteLine(deathScreen[i]);
+				Console.Write(centerPadding);
+				Console.WriteLine(deathScreen[i]);
 			}
 
 			Console.ForegroundColor = ConsoleColor.White;
-
-			Environment.Exit(0);
 		}
 	}
 }

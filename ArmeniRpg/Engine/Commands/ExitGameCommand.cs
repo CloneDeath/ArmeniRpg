@@ -1,6 +1,5 @@
 ﻿using System;
 using ArmeniRpg.Interfaces;
-using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Engine.Commands
 {
@@ -14,7 +13,6 @@ namespace ArmeniRpg.Engine.Commands
 		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
 			gameEngine.IsRunning = false;
-			ConsoleRenderer.WriteLine("Good Bye! Do come again to play this great game!");
 		}
 	}
 }

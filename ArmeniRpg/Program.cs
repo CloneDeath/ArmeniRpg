@@ -11,14 +11,17 @@ namespace ArmeniRpg
 	{
 		public static void Main()
 		{
-			Console.OutputEncoding = Encoding.UTF8;
-			Console.Title = "Armeni Rpg";
-			ConsoleRenderer.ResetColor();
-			ConsoleRenderer.Clear();
+			var console = new ConsoleWindow
+			{
+				Title = "Armeni Rpg",
+				DefaultForegroundColor = ConsoleColor.White,
+				DefaultBackgroundColor = ConsoleColor.Black
+			};
+			console.Clear();
+			console.Render();
 
 			var engine = GetGameEngine();
-
-			engine.Run();
+			engine.Run(console);
 		}
 
 		public static IGameEngine GetGameEngine()

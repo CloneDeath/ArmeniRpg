@@ -12,7 +12,7 @@ namespace ArmeniRpg.Engine.Commands
 
 		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			gameEngine.Player.Inventory.BackPack.ListItems();
+			gameEngine.Player.Inventory.BackPack.ListItems(gameEngine);
 		}
 	}
 }

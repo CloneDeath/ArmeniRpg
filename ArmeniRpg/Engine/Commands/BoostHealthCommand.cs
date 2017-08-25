@@ -12,7 +12,7 @@ namespace ArmeniRpg.Engine.Commands
 
 		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			gameEngine.Player.DrinkHealthBonusPotion();
+			gameEngine.Player.DrinkHealthBonusPotion(gameEngine);
 		}
 	}
 }

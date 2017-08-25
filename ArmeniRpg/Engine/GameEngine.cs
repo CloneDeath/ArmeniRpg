@@ -47,7 +47,7 @@ namespace ArmeniRpg.Engine
 		
 		private readonly MapRenderer _renderer = new MapRenderer();
 
-		public virtual void Run()
+		public virtual void Run(IConsoleWindow window)
 		{
 			IsRunning = true;
 			Player = new PlayerFactory().CreatePlayer();
@@ -58,21 +58,31 @@ namespace ArmeniRpg.Engine
 
 			while (IsRunning)
 			{
-				ConsoleRenderer.ResetColor();
-				ConsoleRenderer.Clear();
-				
-				Console.WriteLine(_status);
-				_renderer.Render(this, new Position(0, 1));
+				Console.CursorVisible = false;
+				window.Clear();
+
+				var statusArea = window.CreateConsoleArea(new Area(Position.Zero, new Size(window.Area.Width, 1)));
+				statusArea.Write(Position.Zero, _status);
+				statusArea.Render();
+
+				var mapWidth = window.Area.Width * 2 / 3;
+				var mapHeight = window.Area.Height - 1;
+
+				var mapArea = window.CreateConsoleArea(new Area(new Position(0, 1), new Size(mapWidth, mapHeight)));
+				_renderer.Render(this, mapArea);
+				mapArea.Render();
 				
 				_status = string.Empty;
 				
 				_commandFactory.Execute(this, new KeyInfo());
 
-				if (_characters.Count == 0)
-				{
-					IsRunning = false;
-					ConsoleRenderer.WriteLine("All your enemies are dead. Congratulations! You are the only one left on earth.");
-				}
+				if (_characters.Count != 0) continue;
+				
+				IsRunning = false;
+				window.Clear();
+				window.Write(Position.Zero, "All your enemies are dead. Congratulations!");
+				window.Write(new Position(0, 1), "You are the only one left on earth.");
+				window.Render();
 			}
 		}
 
@@ -94,6 +104,15 @@ namespace ArmeniRpg.Engine
 		public void SetStatus(string status)
 		{
 			_status = status;
+		}
+
+		public bool IsInBounds(Position position)
+		{
+			if (position.X < 0) return false;
+			if (position.Y < 0) return false;
+			if (position.X >= Map.Width) return false;
+			if (position.Y >= Map.Height) return false;
+			return true;
 		}
 
 		public void AddItem(IGameItem itemToBeAdded)

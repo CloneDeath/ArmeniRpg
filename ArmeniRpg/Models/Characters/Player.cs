@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using ArmeniRpg.Exceptions;
 using ArmeniRpg.Interfaces;
 using ArmeniRpg.Models.Containers;
 using ArmeniRpg.Models.Items;
-using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Models.Characters
 {
@@ -54,7 +52,7 @@ namespace ArmeniRpg.Models.Characters
 			}
 		}
 
-		public void SelfHeal()
+		public void SelfHeal(IGameEngine engine)
 		{
 			var healthPotionSlot = Inventory
 				.BackPack
@@ -64,17 +62,22 @@ namespace ArmeniRpg.Models.Characters
 			var potion = healthPotionSlot?.GameItem as HealthPotion;
 
 			if (potion == null)
-				throw new NoHealthPotionsException("There are no health potions left in the backpack.");
+			{
+				engine.SetStatus("There are no health potions left in the backpack.");
+				return;
+			}
 
 			var maximumHealthRestore = _startHealth;
 			Health += potion.HealthRestore;
-			ConsoleRenderer.WriteLine($"You restored {potion.HealthRestore} health points using Health Potion!");
+			engine.SetStatus($"You restored {potion.HealthRestore} health points using Health Potion!");
 			if (Health > maximumHealthRestore)
+			{
 				Health = maximumHealthRestore;
+			}
 			Inventory.BackPack.RemoveItem(healthPotionSlot);
 		}
 
-		public void DrinkHealthBonusPotion()
+		public void DrinkHealthBonusPotion(IGameEngine engine)
 		{
 			var healthBonusPotionSlot = Inventory
 				.BackPack
@@ -82,10 +85,13 @@ namespace ArmeniRpg.Models.Characters
 				.FirstOrDefault(x => x.GameItem is HealthBonusPotion);
 
 			var potion = healthBonusPotionSlot?.GameItem as HealthBonusPotion;
-			if (potion == null) 
-				throw new NoHealthBonusPotionsException("There are no health bonus potions left in the backpack.");
+			if (potion == null)
+			{
+				engine.SetStatus("There are no health bonus potions left in the backpack.");
+				return;
+			}
 			Health += potion.HealthBonus;
-			ConsoleRenderer.WriteLine($"You boosted your health with {potion.HealthBonus} points using Health Bonus Potion!");
+			engine.SetStatus($"You boosted your health with {potion.HealthBonus} points using Health Bonus Potion!");
 			_startHealth += potion.HealthBonus;
 			Inventory.BackPack.RemoveItem(healthBonusPotionSlot);
 		}

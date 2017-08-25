@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Interfaces
 {
@@ -15,9 +16,10 @@ namespace ArmeniRpg.Interfaces
 		void RemoveEnemy(ICharacter enemyToBeRemoved);
 		void AddItem(IGameItem itemToBeAdded);
 		void RemoveItem(IGameItem itemToBeRemoved);
-		void Run();
+		void Run(IConsoleWindow window);
 		bool IsEmpty(Position position);
 		IEntity GetEntityAtPosition(Position position);
 		void SetStatus(string status);
+		bool IsInBounds(Position position);
 	}
 }

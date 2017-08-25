@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ArmeniRpg.Interfaces;
-using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Engine.Commands
 {
@@ -14,10 +13,8 @@ namespace ArmeniRpg.Engine.Commands
 
 		public void Execute(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			ConsoleRenderer.WriteLine(gameEngine.Player.ToString());
-			ConsoleRenderer.WriteLine(
-				"Number of enemies left: {0}",
-				gameEngine.Entities.Count());
+			gameEngine.SetStatus(gameEngine.Player.ToString());
+			gameEngine.SetStatus($"Number of enemies left: {gameEngine.Entities.Count()}");
 		}
 	}
 }

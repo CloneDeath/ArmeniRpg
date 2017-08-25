@@ -6,7 +6,7 @@
 		IRace Race { get; }
 		int DefensiveBonus { get; }
 		IGameEngine Engine { get; set; }
-		void SelfHeal();
-		void DrinkHealthBonusPotion();
+		void SelfHeal(IGameEngine engine);
+		void DrinkHealthBonusPotion(IGameEngine engine);
 	}
 }

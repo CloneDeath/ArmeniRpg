@@ -8,6 +8,6 @@ namespace ArmeniRpg.Interfaces
 		void LootItem(IGameItem itemToBeLooted);
 		void RemoveItem(ISlot slot);
 		void RemoveLastItem();
-		void ListItems();
+		void ListItems(IGameEngine engine);
 	}
 }

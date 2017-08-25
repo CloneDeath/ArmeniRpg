@@ -23,24 +23,24 @@ namespace ArmeniRpg.Engine.Factories
 
 		protected virtual string GetPlayerName()
 		{
-			ConsoleRenderer.ForegroundColor(ConsoleColor.Green);
-			ConsoleRenderer.WriteLine("Enter Player's Name: ");
-			ConsoleRenderer.ResetColor();
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Enter Player's Name: ");
+			Console.ResetColor();
 			return ConsoleInputReader.ReadLine();
 		}
 
 		private IRace GetPlayerRace()
 		{
-			ConsoleRenderer.ForegroundColor(ConsoleColor.Green);
-			ConsoleRenderer.WriteLine("Choose a race : ");
-			ConsoleRenderer.ResetColor();
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Choose a race : ");
+			Console.ResetColor();
 
 			for (var i = 0; i < AvailableRaces.Count; i++)
 			{
 				var currentRace = AvailableRaces[i];
-				ConsoleRenderer.WriteLine($"{i + 1}: " +
-				                          $"{currentRace.Name} - " +
-				                          $"(Health: {currentRace.Health}, Damage: {currentRace.Damage})");
+				Console.WriteLine($"{i + 1}: " +
+								  $"{currentRace.Name} - " +
+								  $"(Health: {currentRace.Health}, Damage: {currentRace.Damage})");
 			}
 
 			while (true)
@@ -53,7 +53,7 @@ namespace ArmeniRpg.Engine.Factories
 					return AvailableRaces[index - 1];
 				}
 				
-				ConsoleRenderer.WriteLine("Please enter a valid race number.");
+				Console.WriteLine("Please enter a valid race number.");
 			}
 		}
 	}
