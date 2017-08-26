@@ -14,6 +14,8 @@ namespace ArmeniRpg.UI
 		IConsoleArea CreateConsoleArea(Area subArea);
 		
 		void Write(Position position, string text);
+		void Write(Position position, ConsoleColor color, string text);
+		
 		Glyph this[Position position] { get; }
 	}
 }

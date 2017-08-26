@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using ArmeniRpg.Interfaces;
 using ArmeniRpg.Models.Containers;
 using ArmeniRpg.Models.Items;
@@ -9,14 +8,15 @@ namespace ArmeniRpg.Models.Characters
 {
 	public class Player : Character, IPlayer
 	{
-		private int _startHealth;
+		private int _maxHealth;
+		public override int MaxHealth => _maxHealth;
 
 		public Player(string name, IRace race) : base(race.Damage, race.Health)
 		{
 			Name = name;
 			Race = race;
 			Inventory = new Inventory();
-			_startHealth = race.Health;
+			_maxHealth = race.Health;
 		}
 
 		public string Name { get; set; }
@@ -67,12 +67,11 @@ namespace ArmeniRpg.Models.Characters
 				return;
 			}
 
-			var maximumHealthRestore = _startHealth;
 			Health += potion.HealthRestore;
 			engine.SetStatus($"You restored {potion.HealthRestore} health points using Health Potion!");
-			if (Health > maximumHealthRestore)
+			if (Health > _maxHealth)
 			{
-				Health = maximumHealthRestore;
+				Health = _maxHealth;
 			}
 			Inventory.BackPack.RemoveItem(healthPotionSlot);
 		}
@@ -92,16 +91,8 @@ namespace ArmeniRpg.Models.Characters
 			}
 			Health += potion.HealthBonus;
 			engine.SetStatus($"You boosted your health with {potion.HealthBonus} points using Health Bonus Potion!");
-			_startHealth += potion.HealthBonus;
+			_maxHealth += potion.HealthBonus;
 			Inventory.BackPack.RemoveItem(healthBonusPotionSlot);
-		}
-
-		public override string ToString()
-		{
-			var output = new StringBuilder();
-			output.AppendLine("Player stats:");
-			output.AppendFormat($"Health: {Health}, Damage: {Damage}, Defensive Bonus: {DefensiveBonus}");
-			return output.ToString();
 		}
 
 		private void MoveLeft()

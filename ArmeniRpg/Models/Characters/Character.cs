@@ -11,6 +11,7 @@ namespace ArmeniRpg.Models.Characters
 			Health = health;
 		}
 
+		public abstract int MaxHealth { get; }
 		public int Health { get; set; }
 		public int Damage { get; set; }
 		public Position Position { get; set; }

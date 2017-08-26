@@ -14,5 +14,6 @@ namespace ArmeniRpg.Models.Enemies
 
 		public override char Symbol => 'O';
 		public override ConsoleColor Color => ConsoleColor.Red;
+		public override int MaxHealth => EnemyOrcHealth;
 	}
 }

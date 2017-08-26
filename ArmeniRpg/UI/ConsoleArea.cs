@@ -76,6 +76,30 @@ namespace ArmeniRpg.UI
 			}
 		}
 
+		public void Write(Position position, ConsoleColor color, string text)
+		{
+			foreach (var character in text)
+			{
+				switch (character)
+				{
+					case '\r':
+						position = new Position(0, position.Y);
+						continue;
+					case '\n':
+						position = new Position(0, position.Y + 1);
+						break;
+				}
+
+				_glyphs[position].ForegroundColor = color;
+				_glyphs[position].Symbol = character;
+				position = position + new Position(1, 0);
+				if (position.X > Area.Width)
+				{
+					position = new Position(0, position.Y + 1);
+				}
+			}
+		}
+
 		public Glyph this[Position position] => _glyphs[position];
 	}
 }

@@ -46,6 +46,7 @@ namespace ArmeniRpg.Engine
 		private string _status = "Press ? for Help.";
 		
 		private readonly MapRenderer _renderer = new MapRenderer();
+		private readonly PlayerRenderer _playerRenderer = new PlayerRenderer();
 
 		public virtual void Run(IConsoleWindow window)
 		{
@@ -71,9 +72,16 @@ namespace ArmeniRpg.Engine
 				var mapArea = window.CreateConsoleArea(new Area(new Position(0, 1), new Size(mapWidth, mapHeight)));
 				_renderer.Render(this, mapArea);
 				mapArea.Render();
+
+				var playerArea = window.CreateConsoleArea(new Area(
+					new Position(mapWidth, 1),
+					new Size(window.Area.Width - mapWidth, mapHeight)));
+				_playerRenderer.Render(this, playerArea);
+				playerArea.Render();
 				
 				_status = string.Empty;
-				
+
+				Console.SetCursorPosition(0, 0);
 				_commandFactory.Execute(this, new KeyInfo());
 
 				if (_characters.Count != 0) continue;

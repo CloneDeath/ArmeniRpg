@@ -29,7 +29,6 @@ namespace ArmeniRpg
 			var engine = new GameEngine();
 			engine.RegisterCommand(new HelpCommand());
 			engine.RegisterCommand(new MovePlayerCommand());
-			engine.RegisterCommand(new PlayerStatusCommand());
 			engine.RegisterCommand(new HealCommand());
 			engine.RegisterCommand(new BoostHealthCommand());
 			engine.RegisterCommand(new BackPackCommand());
