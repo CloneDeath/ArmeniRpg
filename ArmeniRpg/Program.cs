@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using ArmeniRpg.Engine;
 using ArmeniRpg.Engine.Commands;
 using ArmeniRpg.Interfaces;
@@ -31,7 +30,6 @@ namespace ArmeniRpg
 			engine.RegisterCommand(new MovePlayerCommand());
 			engine.RegisterCommand(new HealCommand());
 			engine.RegisterCommand(new BoostHealthCommand());
-			engine.RegisterCommand(new BackPackCommand());
 			engine.RegisterCommand(new ExitGameCommand());
 			engine.RegisterCommand(new RemoveLastItemCommand());
 			return engine;

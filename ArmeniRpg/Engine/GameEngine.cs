@@ -64,20 +64,19 @@ namespace ArmeniRpg.Engine
 
 				var statusArea = window.CreateConsoleArea(new Area(Position.Zero, new Size(window.Area.Width, 1)));
 				statusArea.Write(Position.Zero, _status);
-				statusArea.Render();
 
 				var mapWidth = window.Area.Width * 2 / 3;
 				var mapHeight = window.Area.Height - 1;
 
 				var mapArea = window.CreateConsoleArea(new Area(new Position(0, 1), new Size(mapWidth, mapHeight)));
 				_renderer.Render(this, mapArea);
-				mapArea.Render();
 
 				var playerArea = window.CreateConsoleArea(new Area(
 					new Position(mapWidth, 1),
 					new Size(window.Area.Width - mapWidth, mapHeight)));
 				_playerRenderer.Render(this, playerArea);
-				playerArea.Render();
+				
+				window.Render();
 				
 				_status = string.Empty;
 

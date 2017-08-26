@@ -10,7 +10,6 @@ namespace ArmeniRpg.UI
 		Area Area { get; }
 
 		void Clear();
-		void Render();
 		IConsoleArea CreateConsoleArea(Area subArea);
 		
 		void Write(Position position, string text);

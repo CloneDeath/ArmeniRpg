@@ -56,7 +56,6 @@ namespace ArmeniRpg.Models.Characters
 		{
 			var healthPotionSlot = Inventory
 				.BackPack
-				.SlotList
 				.FirstOrDefault(x => x.GameItem is HealthPotion);
 
 			var potion = healthPotionSlot?.GameItem as HealthPotion;
@@ -80,7 +79,6 @@ namespace ArmeniRpg.Models.Characters
 		{
 			var healthBonusPotionSlot = Inventory
 				.BackPack
-				.SlotList
 				.FirstOrDefault(x => x.GameItem is HealthBonusPotion);
 
 			var potion = healthBonusPotionSlot?.GameItem as HealthBonusPotion;

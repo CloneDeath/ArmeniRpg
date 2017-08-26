@@ -33,7 +33,7 @@ namespace ArmeniRpg.Engine.Commands
 				currentEnemy.Attack(engine.Player);
 				engine.SetStatus($"The {currentEnemy.GetType().Name} hits you for {currentEnemy.Damage} damage!");
 
-				if (engine.Player.Health < 150 && engine.Player.Inventory.BackPack.SlotList.Any(x =>
+				if (engine.Player.Health < 150 && engine.Player.Inventory.BackPack.Any(x =>
 					    x.GameItem is HealthPotion
 					    || x.GameItem is HealthBonusPotion))
 				{

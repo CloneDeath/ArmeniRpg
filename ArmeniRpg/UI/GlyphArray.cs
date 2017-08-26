@@ -7,6 +7,12 @@ namespace ArmeniRpg.UI
 		private readonly Glyph[,] _glyphs;
 		private Size _size;
 
+		protected GlyphArray(Size size, Glyph[,] glyphs)
+		{
+			_glyphs = glyphs;
+			_size = size;
+		}
+		
 		public GlyphArray(Size size)
 		{
 			_size = size;
@@ -49,5 +55,19 @@ namespace ArmeniRpg.UI
 
 		public Glyph this[int x, int y] => _glyphs[x, y];
 		public Glyph this[Position position] => _glyphs[position.X, position.Y];
+
+		public GlyphArray GetArea(Area subArea)
+		{
+			var newGlyphs = new Glyph[subArea.Width, subArea.Height];
+			for (var x = 0; x < subArea.Width; x++)
+			{
+				for (var y = 0; y < subArea.Height; y++)
+				{
+					var source = _glyphs[x + subArea.X, y + subArea.Y];
+					newGlyphs[x, y] = source;
+				}
+			}
+			return new GlyphArray(subArea.Size, newGlyphs);
+		}
 	}
 }

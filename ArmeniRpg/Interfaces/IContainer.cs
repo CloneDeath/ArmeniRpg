@@ -2,12 +2,11 @@
 
 namespace ArmeniRpg.Interfaces
 {
-	public interface IContainer
+	public interface IContainer : IEnumerable<ISlot>
 	{
-		IEnumerable<ISlot> SlotList { get; }
 		void LootItem(IGameItem itemToBeLooted);
 		void RemoveItem(ISlot slot);
 		void RemoveLastItem();
-		void ListItems(IGameEngine engine);
+		ISlot this[int index] { get; }
 	}
 }

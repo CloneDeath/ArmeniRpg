@@ -39,5 +39,10 @@
 				return (Width * 397) ^ Height;
 			}
 		}
+
+		public override string ToString()
+		{
+			return $"Width: {Width}, Height: {Height}";
+		}
 	}
 }

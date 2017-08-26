@@ -3,5 +3,6 @@
 	public interface IConsoleWindow : IConsoleArea
 	{
 		string Title { get; set; }
+		void Render();
 	}
 }
