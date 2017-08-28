@@ -5,11 +5,26 @@ namespace ArmeniRpg.UI
 {
 	public class ConsoleWindow : ConsoleArea, IConsoleWindow
 	{
-		public ConsoleWindow() 
-			: base(new Area(Position.Zero, new Size(Console.WindowWidth, Console.WindowHeight)), 
-				new GlyphArray(new Size(Console.WindowWidth, Console.WindowHeight)))
+		private static Size ConsoleSize => new Size(Console.WindowWidth, Console.WindowHeight);
+		
+		public ConsoleWindow() : base(new Area(Position.Zero, ConsoleSize), new GlyphArray(ConsoleSize))
 		{
 			Console.OutputEncoding = Encoding.UTF8;
+		}
+
+		public override Area Area => new Area(Position.Zero, ConsoleSize);
+
+		protected override GlyphArray Glyphs
+		{
+			get
+			{
+				var g = base.Glyphs;
+				if (g.Size != ConsoleSize)
+				{
+					g.Resize(ConsoleSize);
+				}
+				return g;
+			}
 		}
 
 		public string Title

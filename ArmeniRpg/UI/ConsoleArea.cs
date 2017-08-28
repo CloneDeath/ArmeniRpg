@@ -4,9 +4,9 @@ namespace ArmeniRpg.UI
 {
 	public class ConsoleArea : IConsoleArea
 	{
-		public Area Area { get; }
+		public virtual Area Area { get; }
 
-		protected readonly GlyphArray Glyphs;
+		protected virtual GlyphArray Glyphs { get; }
 		
 		public ConsoleColor DefaultForegroundColor { get; set; } = ConsoleColor.White;
 		public ConsoleColor DefaultBackgroundColor { get; set; } = ConsoleColor.Black;

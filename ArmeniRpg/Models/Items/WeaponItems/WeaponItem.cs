@@ -4,9 +4,8 @@ namespace ArmeniRpg.Models.Items.WeaponItems
 {
 	public abstract class WeaponItem : Item, IWeapon
 	{
-		protected WeaponItem(Position position, int attackBonus)
+		protected WeaponItem(int attackBonus)
 		{
-			Position = position;
 			AttackBonus = attackBonus;
 		}
 

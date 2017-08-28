@@ -1,14 +1,11 @@
 ﻿using System;
-using ArmeniRpg.Attributes;
 
 namespace ArmeniRpg.Models.Items
 {
-	[Item]
 	public class HealthPotion : Item
 	{
-		public HealthPotion(Position position, HealthPotionSize healthPotionSize)
+		public HealthPotion(HealthPotionSize healthPotionSize)
 		{
-			Position = position;
 			HealthPotionSize = healthPotionSize;
 		}
 

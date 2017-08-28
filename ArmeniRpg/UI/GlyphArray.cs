@@ -4,18 +4,18 @@ namespace ArmeniRpg.UI
 {
 	public class GlyphArray
 	{
-		private readonly Glyph[,] _glyphs;
-		private Size _size;
+		private Glyph[,] _glyphs;
+		public Size Size { get; private set; }
 
 		protected GlyphArray(Size size, Glyph[,] glyphs)
 		{
 			_glyphs = glyphs;
-			_size = size;
+			Size = size;
 		}
 		
 		public GlyphArray(Size size)
 		{
-			_size = size;
+			Size = size;
 			_glyphs = new Glyph[size.Width, size.Height];
 			for (var x = 0; x < Width; x++)
 			{
@@ -26,8 +26,8 @@ namespace ArmeniRpg.UI
 			}
 		}
 
-		public int Width => _size.Width;
-		public int Height => _size.Height;
+		public int Width => Size.Width;
+		public int Height => Size.Height;
 
 		public void SetBackgroundColor(ConsoleColor color)
 		{
@@ -68,6 +68,27 @@ namespace ArmeniRpg.UI
 				}
 			}
 			return new GlyphArray(subArea.Size, newGlyphs);
+		}
+
+		public void Resize(Size newSize)
+		{
+			var old = _glyphs;
+			_glyphs = new Glyph[newSize.Width, newSize.Height];
+			for (var x = 0; x < newSize.Width; x++)
+			{
+				for (var y = 0; y < newSize.Height; y++)
+				{
+					if (x >= Size.Width || y >= Size.Height)
+					{
+						_glyphs[x, y] = new Glyph();
+					}
+					else
+					{
+						_glyphs[x, y] = old[x, y];
+					}
+				}
+			}
+			Size = newSize;
 		}
 	}
 }
