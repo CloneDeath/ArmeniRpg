@@ -19,8 +19,7 @@ namespace ArmeniRpg.Models.Containers
 			HeadSlot = new Slot();
 			FeetSlot = new Slot();
 			GlovesSlot = new Slot();
-			slotList = new List<ISlot>();
-			slotList.Add(MainHandSlot);
+			slotList = new List<ISlot> {MainHandSlot};
 			weaponSlots = new Dictionary<int, ISlot>();
 			armorSlots = new Dictionary<int, ISlot>();
 			BackPack = new BackPack();
