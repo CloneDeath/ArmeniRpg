@@ -11,13 +11,15 @@ namespace ArmeniRpg.Models.Characters
 		private int _maxHealth;
 		public override int MaxHealth => _maxHealth;
 
-		public Player(string name, IRace race) : base(race.Damage, race.Health)
+		public Player(string name, IRace race) : base(race.Health)
 		{
 			Name = name;
 			Race = race;
 			Inventory = new Inventory();
 			_maxHealth = race.Health;
 		}
+
+		public override int Damage => Race.Damage;
 
 		public string Name { get; set; }
 

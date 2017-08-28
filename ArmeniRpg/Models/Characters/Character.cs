@@ -5,16 +5,16 @@ namespace ArmeniRpg.Models.Characters
 {
 	public abstract class Character : ICharacter
 	{
-		protected Character(int damage, int health)
+		protected Character(int health)
 		{
-			Damage = damage;
 			Health = health;
 		}
 
 		public abstract int MaxHealth { get; }
 		public int Health { get; set; }
-		public int Damage { get; set; }
 		public Position Position { get; set; }
+		
+		public abstract int Damage { get; }
 		
 		public abstract char Symbol { get; }
 		public abstract ConsoleColor Color { get; }

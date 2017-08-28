@@ -9,7 +9,7 @@ namespace ArmeniRpg.Engine.Commands
 	{
 		private void CollectItem(IGameEngine gameEngine, IGameItem currentItem)
 		{
-			currentItem.ItemState = ItemState.Collected;
+			gameEngine.RemoveItem(currentItem);
 			gameEngine.Player.Inventory.BackPack.LootItem(currentItem);
 			gameEngine.SetStatus($"{currentItem.GetType().Name} collected!");
 		}
@@ -53,9 +53,7 @@ namespace ArmeniRpg.Engine.Commands
 		{
 			return gameEngine
 				.Items
-				.FirstOrDefault(e => e.Position.X == gameEngine.Player.Position.X
-				                     && e.Position.Y == gameEngine.Player.Position.Y
-				                     && e.ItemState == ItemState.Available);
+				.FirstOrDefault(e => e.Position == gameEngine.Player.Position);
 		}
 
 		private ICharacter FindEnemy(IGameEngine gameEngine)

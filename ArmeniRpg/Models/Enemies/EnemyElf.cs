@@ -5,13 +5,11 @@ namespace ArmeniRpg.Models.Enemies
 {
 	public class EnemyElf : Character
 	{
-		private const int EnemyElfDamage = 17;
 		private const int EnemyElfHealth = 90;
 
-		public EnemyElf() : base(EnemyElfDamage, EnemyElfHealth)
-		{
-		}
+		public EnemyElf() : base(EnemyElfHealth) { }
 
+		public override int Damage => 17;
 		public override char Symbol => 'E';
 		public override ConsoleColor Color => ConsoleColor.Red;
 		public override int MaxHealth => EnemyElfHealth;

@@ -3,7 +3,6 @@ using ArmeniRpg.Attributes;
 
 namespace ArmeniRpg.Models.Items.WeaponItems
 {
-	[Weapon]
 	[Item]
 	public class Sword : WeaponItem
 	{
