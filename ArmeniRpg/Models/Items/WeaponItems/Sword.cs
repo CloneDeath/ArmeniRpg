@@ -1,16 +1,13 @@
 ﻿using System;
+using ArmeniRpg.Interfaces;
 
 namespace ArmeniRpg.Models.Items.WeaponItems
 {
-	public class Sword : WeaponItem
+	public class Sword : Item, IWeapon
 	{
-		private const int SwordAttackBonus = 10;
-
-		public Sword() : base(SwordAttackBonus)
-		{
-		}
-
+		public override string Name => $"Sword (Damage +{AttackBonus})";
 		public override char Symbol => 'S';
 		public override ConsoleColor Color => ConsoleColor.DarkCyan;
+		public int AttackBonus => 10;
 	}
 }

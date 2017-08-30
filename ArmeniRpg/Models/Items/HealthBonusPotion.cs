@@ -12,6 +12,7 @@ namespace ArmeniRpg.Models.Items
 		public int HealthBonus => (int) HealthBonusPotionSize;
 
 		public HealthBonusPotionSize HealthBonusPotionSize { get; set; }
+		public override string Name => "Bonus Health Potion";
 		public override char Symbol => 'B';
 		public override ConsoleColor Color => ConsoleColor.Blue;
 	}

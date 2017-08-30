@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using ArmeniRpg.Interfaces;
 using ArmeniRpg.Models.Containers;
 using ArmeniRpg.Models.Items;
@@ -19,9 +18,9 @@ namespace ArmeniRpg.Models.Characters
 			_maxHealth = race.Health;
 		}
 
-		public override int Damage => Race.Damage;
+		public override int Damage => Race.Damage + Inventory.MainHandSlot.AttackBonus;
 
-		public string Name { get; set; }
+		public override string Name { get; }
 
 		public int DefensiveBonus { get; set; }
 		
@@ -29,23 +28,21 @@ namespace ArmeniRpg.Models.Characters
 
 		public IInventory Inventory { get; }
 
-		public IGameEngine Engine { get; set; }
-
-		public void Move(IKeyInfo directionKey)
+		public void Move(IGameEngine engine, IKeyInfo directionKey)
 		{
 			switch (directionKey.Key)
 			{
 				case ConsoleKey.UpArrow:
-					MoveUp();
+					MoveUp(engine);
 					break;
 				case ConsoleKey.DownArrow:
-					MoveDown();
+					MoveDown(engine);
 					break;
 				case ConsoleKey.RightArrow:
-					MoveRight();
+					MoveRight(engine);
 					break;
 				case ConsoleKey.LeftArrow:
-					MoveLeft();
+					MoveLeft(engine);
 					break;
 				default:
 				{
@@ -56,80 +53,88 @@ namespace ArmeniRpg.Models.Characters
 
 		public void SelfHeal(IGameEngine engine)
 		{
-			var healthPotionSlot = Inventory
-				.BackPack
-				.FirstOrDefault(x => x.GameItem is HealthPotion);
-
-			var potion = healthPotionSlot?.GameItem as HealthPotion;
-
+			var potion = Inventory.BackPack.GetItem<HealthPotion>();
 			if (potion == null)
 			{
 				engine.SetStatus("There are no health potions left in the backpack.");
 				return;
 			}
-
-			Health += potion.HealthRestore;
 			engine.SetStatus($"You restored {potion.HealthRestore} health points using Health Potion!");
-			if (Health > _maxHealth)
-			{
+			Health += potion.HealthRestore;
+			if (Health > _maxHealth) {
 				Health = _maxHealth;
 			}
-			Inventory.BackPack.RemoveItem(healthPotionSlot);
+			Inventory.BackPack.RemoveItem(potion);
 		}
 
 		public void DrinkHealthBonusPotion(IGameEngine engine)
 		{
-			var healthBonusPotionSlot = Inventory
-				.BackPack
-				.FirstOrDefault(x => x.GameItem is HealthBonusPotion);
-
-			var potion = healthBonusPotionSlot?.GameItem as HealthBonusPotion;
+			var potion = Inventory.BackPack.GetItem<HealthBonusPotion>();
 			if (potion == null)
 			{
 				engine.SetStatus("There are no health bonus potions left in the backpack.");
 				return;
 			}
-			Health += potion.HealthBonus;
 			engine.SetStatus($"You boosted your health with {potion.HealthBonus} points using Health Bonus Potion!");
+			Health += potion.HealthBonus * 2;
 			_maxHealth += potion.HealthBonus;
-			Inventory.BackPack.RemoveItem(healthBonusPotionSlot);
+			Inventory.BackPack.RemoveItem(potion);
 		}
 
-		private void MoveLeft()
+		public void CollectItem(IGameEngine engine, IGameItem item)
+		{
+			if (Inventory.MainHandSlot.IsEmpty && Inventory.MainHandSlot.CanOccupy(item))
+			{
+				Inventory.MainHandSlot.SetItem(item);
+				engine.SetStatus($"{item.Name} equiped to Main Hand.");
+			} 
+			else if (Inventory.BackPack.CanHoldItem(item))
+			{
+				Inventory.BackPack.HoldItem(item);
+				engine.SetStatus($"{item.Name} placed in backpack.");
+			}
+			else
+			{
+				item.Position = Position;
+				engine.AddItem(item);
+			}
+		}
+
+		private void MoveLeft(IGameEngine engine)
 		{
 			if (Position.X - 1 < 0)
 			{
-				Engine.SetStatus("You have reached the border of the map.");
+				engine.SetStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(-1, 0);
 		}
 
-		private void MoveRight()
+		private void MoveRight(IGameEngine engine)
 		{
-			if (Position.X + 1 >= Engine.Map.Width)
+			if (Position.X + 1 >= engine.Map.Width)
 			{
-				Engine.SetStatus("You have reached the border of the map.");
+				engine.SetStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(1, 0);
 		}
 
-		private void MoveDown()
+		private void MoveDown(IGameEngine engine)
 		{
-			if (Position.Y + 1 >= Engine.Map.Height)
+			if (Position.Y + 1 >= engine.Map.Height)
 			{
-				Engine.SetStatus("You have reached the border of the map.");
+				engine.SetStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(0, 1);
 		}
 
-		private void MoveUp()
+		private void MoveUp(IGameEngine engine)
 		{
 			if (Position.Y - 1 < 0)
 			{
-				Engine.SetStatus("You have reached the border of the map.");
+				engine.SetStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(0, -1);

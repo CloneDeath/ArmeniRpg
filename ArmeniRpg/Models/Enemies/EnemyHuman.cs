@@ -10,6 +10,7 @@ namespace ArmeniRpg.Models.Enemies
 		public EnemyHuman() : base(EnemyHumanHealth) { }
 
 		public override int Damage => 15;
+		public override string Name => "Human";
 		public override char Symbol => 'M';
 		public override ConsoleColor Color => ConsoleColor.Red;
 		public override int MaxHealth => EnemyHumanHealth;

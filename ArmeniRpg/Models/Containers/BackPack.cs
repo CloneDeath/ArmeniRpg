@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ArmeniRpg.Exceptions;
 using ArmeniRpg.Interfaces;
 
 namespace ArmeniRpg.Models.Containers
@@ -16,49 +14,38 @@ namespace ArmeniRpg.Models.Containers
 		{
 			_slotList = new List<ISlot>();
 			for (var i = 0; i < BackPackSlotNumber; i++)
-				_slotList.Add(new Slot());
+				_slotList.Add(new GenericSlot());
 		}
 
-		public void LootItem(IGameItem itemToBeLooted)
+		public bool CanHoldItem(IGameItem item)
 		{
-			var emptySlot = _slotList.FirstOrDefault(x => x.IsEmpty);
-
-			if (emptySlot == null)
-				throw new BackPackFullException("Your backpack is full.");
-
-			emptySlot.GameItem = itemToBeLooted;
-			emptySlot.IsEmpty = false;
+			return _slotList.Any(s => s.IsEmpty && s.CanOccupy(item));
 		}
 
-		public void RemoveItem(ISlot slot)
+		public void HoldItem(IGameItem item)
 		{
-			slot.GameItem = null;
-			slot.IsEmpty = true;
+			var emptySlot = _slotList.FirstOrDefault(s => s.IsEmpty && s.CanOccupy(item));
+			emptySlot.SetItem(item);
 		}
 
-		public void RemoveLastItem()
+		public bool ContainsItem(IGameItem item)
 		{
-			RemoveLastItemInternal();
+			return _slotList.Any(s => s.Item == item);
 		}
+
+		public void RemoveItem(IGameItem item)
+		{
+			var slot = _slotList.FirstOrDefault(s => s.Item == item);
+			slot?.ClearItem();
+		}
+
+		public int Size => _slotList.Count;
 
 		public ISlot this[int index] => _slotList[index];
-
-		private void RemoveLastItemInternal()
+		
+		public T GetItem<T>() where T : IGameItem
 		{
-			/* Method which removes the last collected item from the backpack
-			(sets new object at that index) if the player wants to collect another one */
-			var indexOfElemenToRemove = _slotList.IndexOf(
-				                            _slotList.FirstOrDefault(slot => slot.IsEmpty)) - 1;
-
-			if (indexOfElemenToRemove == -1)
-				throw new ArgumentException("Invalid operation. Your backpack is empty.");
-
-			if (indexOfElemenToRemove == -2)
-				indexOfElemenToRemove = _slotList.Count - 1; /*last element, because indexOf returns -1, 
-                when it doesn't find element (empty slot) - 1 = -2 */
-
-			_slotList.RemoveAt(indexOfElemenToRemove);
-			_slotList.Insert(indexOfElemenToRemove, new Slot());
+			return _slotList.Where(s => !s.IsEmpty).Select(s => s.Item).OfType<T>().FirstOrDefault();
 		}
 
 		public IEnumerator<ISlot> GetEnumerator() => _slotList.GetEnumerator();

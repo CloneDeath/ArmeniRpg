@@ -10,6 +10,7 @@ namespace ArmeniRpg.Models.Enemies
 		public Goblin() : base(GoblinHealth) { }
 
 		public override int Damage => 5;
+		public override string Name => "Goblin";
 		public override char Symbol => 'G';
 		public override ConsoleColor Color => ConsoleColor.Red;
 		public override int MaxHealth => GoblinHealth;

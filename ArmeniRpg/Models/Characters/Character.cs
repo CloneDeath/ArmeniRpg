@@ -10,6 +10,7 @@ namespace ArmeniRpg.Models.Characters
 			Health = health;
 		}
 
+		public abstract string Name { get; }
 		public abstract int MaxHealth { get; }
 		public int Health { get; set; }
 		public Position Position { get; set; }

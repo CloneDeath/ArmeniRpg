@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ArmeniRpg.Interfaces;
+using ArmeniRpg.Models.Containers;
 using ArmeniRpg.UI;
 
 namespace ArmeniRpg.Engine
@@ -29,12 +30,13 @@ namespace ArmeniRpg.Engine
 
 		private void RenderInventory(IInventory inventory, IConsoleArea area)
 		{
+			area.Write(Position.Zero, $"Main Hand: {inventory.MainHandSlot.Item?.Name ?? "--empty--"}");
 			var backpack = inventory.BackPack;
 			for (var i = 0; i < backpack.Count(); i++)
 			{
 				var slot = backpack[i];
-				var itemName = slot.IsEmpty ? "--empty--" : slot.GameItem.ToString();
-				area.Write(new Position(0, i), $"{(char) ('a' + i)}) {itemName}");
+				var itemName = slot.Item?.Name ?? "--empty--";
+				area.Write(new Position(0, i + 2), $"{(char) ('a' + i)}) {itemName}");
 			}
 		}
 	}

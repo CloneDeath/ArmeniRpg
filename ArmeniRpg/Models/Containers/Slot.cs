@@ -2,22 +2,15 @@
 
 namespace ArmeniRpg.Models.Containers
 {
-	public class Slot : ISlot
+	public abstract class Slot<T> : ISlot 
+		where T : IGameItem
 	{
-		public Slot()
-		{
-			IsEmpty = true;
-			GameItem = null;
-		}
-
-		public IGameItem GameItem { get; set; }
-
-		public bool IsEmpty { get; set; }
-
-		public void ClearSlot()
-		{
-			GameItem = null;
-			IsEmpty = true;
-		}
+		IGameItem ISlot.Item => Item;
+		public T Item { get; protected set; }
+		
+		public bool IsEmpty => Item == null;
+		public bool CanOccupy(IGameItem item) => item is T;
+		public void SetItem(IGameItem item) => Item = (T)item;
+		public void ClearItem() => Item = default(T);
 	}
 }

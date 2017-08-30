@@ -14,7 +14,6 @@ Combat is automatic - when you reach an enemy, you fight until one of you is dea
 Controls:
 F1     displays basic game info and commands
 ←↑↓→   move player in the respective direction
-R      Removes your last collected element from your backpack
 H      heal yourself using a potion
 I      consume a health bonus potion to increase your health permanently, has a healing effect as well
 Esc    end the game

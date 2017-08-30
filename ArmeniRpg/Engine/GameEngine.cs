@@ -52,7 +52,6 @@ namespace ArmeniRpg.Engine
 		{
 			IsRunning = true;
 			Player = new PlayerFactory().CreatePlayer();
-			Player.Engine = this;
 
 			new SpawnEnemiesCommand().Execute(this);
 			new SpawnItemsCommand().Execute(this);

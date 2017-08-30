@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ArmeniRpg.Interfaces;
-using ArmeniRpg.Models.Items;
 
 namespace ArmeniRpg.Engine.Commands
 {
@@ -10,8 +9,7 @@ namespace ArmeniRpg.Engine.Commands
 		private void CollectItem(IGameEngine gameEngine, IGameItem currentItem)
 		{
 			gameEngine.RemoveItem(currentItem);
-			gameEngine.Player.Inventory.BackPack.LootItem(currentItem);
-			gameEngine.SetStatus($"{currentItem.GetType().Name} collected!");
+			gameEngine.Player.CollectItem(gameEngine, currentItem);
 		}
 
 		private void EnterBattle(IGameEngine engine, ICharacter currentEnemy)
@@ -32,13 +30,6 @@ namespace ArmeniRpg.Engine.Commands
 
 				currentEnemy.Attack(engine.Player);
 				engine.SetStatus($"The {currentEnemy.GetType().Name} hits you for {currentEnemy.Damage} damage!");
-
-				if (engine.Player.Health < 150 && engine.Player.Inventory.BackPack.Any(x =>
-					    x.GameItem is HealthPotion
-					    || x.GameItem is HealthBonusPotion))
-				{
-					engine.Player.SelfHeal(engine);
-				}
 
 				if (engine.Player.Health <= 0)
 				{
@@ -79,7 +70,7 @@ namespace ArmeniRpg.Engine.Commands
 
 		private void MovePlayer(IGameEngine gameEngine, IKeyInfo keyInfo)
 		{
-			gameEngine.Player.Move(keyInfo);
+			gameEngine.Player.Move(gameEngine, keyInfo);
 
 			var currentEnemy = FindEnemy(gameEngine);
 

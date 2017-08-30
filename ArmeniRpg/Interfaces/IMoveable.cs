@@ -2,6 +2,6 @@
 {
 	public interface IMoveable
 	{
-		void Move(IKeyInfo direction);
+		void Move(IGameEngine engine, IKeyInfo direction);
 	}
 }
