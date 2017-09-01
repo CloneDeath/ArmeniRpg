@@ -5,6 +5,8 @@ namespace ArmeniRpg.UI
 {
 	public class ConsoleWindow : ConsoleArea, IConsoleWindow
 	{
+		private GlyphArray _previous;
+		
 		private static Size ConsoleSize => new Size(Console.WindowWidth, Console.WindowHeight);
 		
 		public ConsoleWindow() : base(new Area(Position.Zero, ConsoleSize), new GlyphArray(ConsoleSize))
@@ -21,6 +23,7 @@ namespace ArmeniRpg.UI
 				var g = base.Glyphs;
 				if (g.Size != ConsoleSize)
 				{
+					_previous = null;
 					g.Resize(ConsoleSize);
 				}
 				return g;
@@ -41,14 +44,18 @@ namespace ArmeniRpg.UI
 				{
 					var consoleX = x + Area.X;
 					var consoleY = y + Area.Y;
-					Console.SetCursorPosition(consoleX, consoleY);
-
 					var glyph = Glyphs[x, y];
+
+					if (_previous != null && _previous[x, y] == glyph) continue;
+					
+					Console.SetCursorPosition(consoleX, consoleY);
 					Console.BackgroundColor = glyph.BackgroundColor;
 					Console.ForegroundColor = glyph.ForegroundColor;
 					Console.Write(glyph.Symbol);
 				}
 			}
+
+			_previous = Glyphs.Clone();
 		}
 	}
 }

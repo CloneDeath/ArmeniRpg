@@ -1,6 +1,7 @@
 ﻿using System;
 using ArmeniRpg.Engine;
 using ArmeniRpg.Engine.Commands;
+using ArmeniRpg.Engine.Factories;
 using ArmeniRpg.Interfaces;
 using ArmeniRpg.UI;
 
@@ -20,6 +21,7 @@ namespace ArmeniRpg
 			console.Render();
 
 			var engine = GetGameEngine();
+			engine.Player = new PlayerFactory().CreatePlayer(console);
 			engine.Run(console);
 		}
 

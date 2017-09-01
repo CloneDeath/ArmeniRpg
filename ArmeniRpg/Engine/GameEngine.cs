@@ -34,7 +34,7 @@ namespace ArmeniRpg.Engine
 
 		public IEnumerable<IGameItem> Items => _items;
 
-		public IPlayer Player { get; private set; }
+		public IPlayer Player { get; set; }
 
 		public IMap Map { get; }
 
@@ -51,7 +51,6 @@ namespace ArmeniRpg.Engine
 		public virtual void Run(IConsoleWindow window)
 		{
 			IsRunning = true;
-			Player = new PlayerFactory().CreatePlayer();
 
 			new SpawnEnemiesCommand().Execute(this);
 			new SpawnItemsCommand().Execute(this);

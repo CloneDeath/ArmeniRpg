@@ -14,47 +14,48 @@ namespace ArmeniRpg.Engine.Factories
 			new Human(), new Elf(), new Orc()
 		};
 
-		public IPlayer CreatePlayer()
+		public IPlayer CreatePlayer(IConsoleWindow console)
 		{
-			var name = GetPlayerName();
-			var playerRace = GetPlayerRace();
+			var name = GetPlayerName(console);
+			var playerRace = GetPlayerRace(console);
+			
+			Console.Clear();
+			console.Clear();
 			return new Player(name, playerRace);
 		}
 
-		protected virtual string GetPlayerName()
+		protected virtual string GetPlayerName(IConsoleWindow console)
 		{
-			Console.SetCursorPosition(0, 0);
-			Console.ForegroundColor = ConsoleColor.Green;
-			Console.WriteLine("Enter Player's Name: ");
+			console.Write(Position.Zero, ConsoleColor.Green, "Enter Player's Name: ");
+			console.Render();
 			Console.ForegroundColor = ConsoleColor.White;
 			return ConsoleInputReader.ReadLine();
 		}
 
-		private IRace GetPlayerRace()
+		private IRace GetPlayerRace(IConsoleWindow console)
 		{
-			Console.ForegroundColor = ConsoleColor.Green;
-			Console.WriteLine("Choose A Race: ");
-			Console.ForegroundColor = ConsoleColor.White;
-
+			Console.Clear();
+			console.Clear();
+			console.Write(Position.Zero, ConsoleColor.Green, "Choose A Race: ");
 			for (var i = 0; i < AvailableRaces.Count; i++)
 			{
 				var currentRace = AvailableRaces[i];
-				Console.WriteLine($"{i + 1}: " +
-								  $"{currentRace.Name} - " +
-								  $"(Health: {currentRace.Health}, Damage: {currentRace.Damage})");
+				console.Write(new Position(0, i + 1), $"{i + 1}: " +
+				                                      $"{currentRace.Name} - " +
+				                                      $"(Health: {currentRace.Health}, Damage: {currentRace.Damage})");
 			}
 
 			while (true)
 			{
-				var raceNumber = ConsoleInputReader.ReadLine();
+				console.Render();
+				var raceNumber = ConsoleInputReader.ReadKey();
 
-				int index;
-				if (int.TryParse(raceNumber, out index) && index >= 1 && index <= AvailableRaces.Count)
+				if (int.TryParse(raceNumber.KeyChar.ToString(), out int index) && index >= 1 && index <= AvailableRaces.Count)
 				{
 					return AvailableRaces[index - 1];
 				}
 				
-				Console.WriteLine("Please enter a valid race number.");
+				console.Write(new Position(0, AvailableRaces.Count + 1), "Please enter a valid race number.");
 			}
 		}
 	}

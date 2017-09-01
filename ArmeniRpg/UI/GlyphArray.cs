@@ -90,5 +90,20 @@ namespace ArmeniRpg.UI
 			}
 			Size = newSize;
 		}
+
+		public GlyphArray Clone()
+		{
+			var array = new GlyphArray(Size);
+			for (var x = 0; x < Width; x++)
+			{
+				for (var y = 0; y < Height; y++)
+				{
+					array[x, y].Symbol = this[x, y].Symbol;
+					array[x, y].BackgroundColor = this[x, y].BackgroundColor;
+					array[x, y].ForegroundColor = this[x, y].ForegroundColor;
+				}
+			}
+			return array;
+		}
 	}
 }

@@ -19,8 +19,6 @@ namespace ArmeniRpg.Engine
 
 			area.Write(new Position(0, 4), $"Damage: {player.Damage}");
 			area.Write(new Position(0, 5), $"Defensive Bonus: {player.DefensiveBonus}");
-
-			Console.WriteLine(area.Area);
 			
 			area.Write(new Position(0, 7), $"Number of enemies left: {engine.Entities.Count()}");
 

@@ -7,7 +7,7 @@ namespace ArmeniRpg.Interfaces
 	{
 		int NumberOfItems { get; }
 		int NumberOfEnemies { get; }
-		IPlayer Player { get; }
+		IPlayer Player { get; set; }
 		IMap Map { get; }
 		bool IsRunning { get; set; }
 		IEnumerable<IEntity> Entities { get; }
