@@ -14,22 +14,20 @@ namespace ArmeniRpg.Engine.Commands
 
 		private void EnterBattle(IGameEngine engine, ICharacter currentEnemy)
 		{
-			engine.SetStatus($"An enemy {currentEnemy.GetType().Name} is approaching. Prepare for battle!");
 			while (true)
 			{
 				engine.Player.Attack(currentEnemy);
-				engine.SetStatus($"You smash the {currentEnemy.GetType().Name} for {engine.Player.Damage} damage!");
+				engine.PushStatus($"You smash the {currentEnemy.Name} for {engine.Player.Damage} damage!");
 
 				if (currentEnemy.Health <= 0)
 				{
-					engine.SetStatus("Enemy killed!");
-					engine.SetStatus($"Health Remaining: {engine.Player.Health}");
+					engine.PushStatus($"Enemy {currentEnemy.Name} killed!");
 					engine.RemoveEnemy(currentEnemy);
 					return;
 				}
 
 				currentEnemy.Attack(engine.Player);
-				engine.SetStatus($"The {currentEnemy.GetType().Name} hits you for {currentEnemy.Damage} damage!");
+				engine.PushStatus($"The {currentEnemy.Name} hits you for {currentEnemy.Damage} damage!");
 
 				if (engine.Player.Health <= 0)
 				{

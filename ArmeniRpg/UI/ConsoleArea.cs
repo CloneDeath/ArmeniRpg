@@ -32,7 +32,6 @@ namespace ArmeniRpg.UI
 				DefaultBackgroundColor = DefaultBackgroundColor,
 				DefaultForegroundColor = DefaultForegroundColor
 			};
-			area.Clear();
 			return area;
 		}
 

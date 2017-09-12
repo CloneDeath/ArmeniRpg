@@ -56,10 +56,10 @@ namespace ArmeniRpg.Models.Characters
 			var potion = Inventory.BackPack.GetItem<HealthPotion>();
 			if (potion == null)
 			{
-				engine.SetStatus("There are no health potions left in the backpack.");
+				engine.PushStatus("There are no health potions left in the backpack.");
 				return;
 			}
-			engine.SetStatus($"You restored {potion.HealthRestore} health points using Health Potion!");
+			engine.PushStatus($"You restored {potion.HealthRestore} health points using Health Potion!");
 			Health += potion.HealthRestore;
 			if (Health > _maxHealth) {
 				Health = _maxHealth;
@@ -72,10 +72,10 @@ namespace ArmeniRpg.Models.Characters
 			var potion = Inventory.BackPack.GetItem<HealthBonusPotion>();
 			if (potion == null)
 			{
-				engine.SetStatus("There are no health bonus potions left in the backpack.");
+				engine.PushStatus("There are no health bonus potions left in the backpack.");
 				return;
 			}
-			engine.SetStatus($"You boosted your health with {potion.HealthBonus} points using Health Bonus Potion!");
+			engine.PushStatus($"You boosted your health with {potion.HealthBonus} points using Health Bonus Potion!");
 			Health += potion.HealthBonus * 2;
 			_maxHealth += potion.HealthBonus;
 			Inventory.BackPack.RemoveItem(potion);
@@ -86,12 +86,12 @@ namespace ArmeniRpg.Models.Characters
 			if (Inventory.MainHandSlot.IsEmpty && Inventory.MainHandSlot.CanOccupy(item))
 			{
 				Inventory.MainHandSlot.SetItem(item);
-				engine.SetStatus($"{item.Name} equiped to Main Hand.");
+				engine.PushStatus($"{item.Name} equiped to Main Hand.");
 			} 
 			else if (Inventory.BackPack.CanHoldItem(item))
 			{
 				Inventory.BackPack.HoldItem(item);
-				engine.SetStatus($"{item.Name} placed in backpack.");
+				engine.PushStatus($"{item.Name} placed in backpack.");
 			}
 			else
 			{
@@ -104,7 +104,7 @@ namespace ArmeniRpg.Models.Characters
 		{
 			if (Position.X - 1 < 0)
 			{
-				engine.SetStatus("You have reached the border of the map.");
+				engine.PushStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(-1, 0);
@@ -114,7 +114,7 @@ namespace ArmeniRpg.Models.Characters
 		{
 			if (Position.X + 1 >= engine.Map.Width)
 			{
-				engine.SetStatus("You have reached the border of the map.");
+				engine.PushStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(1, 0);
@@ -124,7 +124,7 @@ namespace ArmeniRpg.Models.Characters
 		{
 			if (Position.Y + 1 >= engine.Map.Height)
 			{
-				engine.SetStatus("You have reached the border of the map.");
+				engine.PushStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(0, 1);
@@ -134,7 +134,7 @@ namespace ArmeniRpg.Models.Characters
 		{
 			if (Position.Y - 1 < 0)
 			{
-				engine.SetStatus("You have reached the border of the map.");
+				engine.PushStatus("You have reached the border of the map.");
 				return;
 			}
 			ChangePlayerCoordinates(0, -1);

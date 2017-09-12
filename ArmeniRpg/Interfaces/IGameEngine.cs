@@ -19,7 +19,8 @@ namespace ArmeniRpg.Interfaces
 		void Run(IConsoleWindow window);
 		bool IsEmpty(Position position);
 		IEntity GetEntityAtPosition(Position position);
-		void SetStatus(string status);
 		bool IsInBounds(Position position);
+		
+		void PushStatus(string status);
 	}
 }

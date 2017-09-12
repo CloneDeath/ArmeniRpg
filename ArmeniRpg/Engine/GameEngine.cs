@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ArmeniRpg.Engine.Commands;
-using ArmeniRpg.Engine.Factories;
 using ArmeniRpg.Interfaces;
 using ArmeniRpg.Models;
 using ArmeniRpg.Models.Tiles;
@@ -43,13 +42,15 @@ namespace ArmeniRpg.Engine
 
 		public bool IsRunning { get; set; }
 
-		private string _status = "Press ? for Help.";
+		private readonly Queue<string> _statusList = new Queue<string>();
 		
 		private readonly MapRenderer _renderer = new MapRenderer();
 		private readonly PlayerRenderer _playerRenderer = new PlayerRenderer();
 
 		public virtual void Run(IConsoleWindow window)
 		{
+			_statusList.Enqueue("Press ? for Help.");
+			
 			IsRunning = true;
 
 			new SpawnEnemiesCommand().Execute(this);
@@ -58,28 +59,42 @@ namespace ArmeniRpg.Engine
 			while (IsRunning)
 			{
 				Console.CursorVisible = false;
-				window.Clear();
-
-				var statusArea = window.CreateConsoleArea(new Area(Position.Zero, new Size(window.Area.Width, 1)));
-				statusArea.Write(Position.Zero, _status);
 
 				var mapWidth = window.Area.Width * 2 / 3;
 				var mapHeight = window.Area.Height - 1;
 
 				var mapArea = window.CreateConsoleArea(new Area(new Position(0, 1), new Size(mapWidth, mapHeight)));
+				mapArea.Clear();
 				_renderer.Render(this, mapArea);
 
 				var playerArea = window.CreateConsoleArea(new Area(
 					new Position(mapWidth, 1),
 					new Size(window.Area.Width - mapWidth, mapHeight)));
+				playerArea.Clear();
 				_playerRenderer.Render(this, playerArea);
 				
-				window.Render();
 				
-				_status = string.Empty;
+				var statusArea = window.CreateConsoleArea(new Area(Position.Zero, new Size(window.Area.Width, 1)));
+				statusArea.Clear();
+				while (_statusList.Any())
+				{
+					statusArea.Clear();
+					var status = _statusList.Dequeue();
+					if (_statusList.Any())
+					{
+						status += " <more>";
+					}
+					statusArea.Write(Position.Zero, status);
+					window.Render();
+					if (_statusList.Any())
+					{
+						KeyInfo.GetInput();
+					}
+				}
+				
+				window.Render();
 
-				Console.SetCursorPosition(0, 0);
-				_commandFactory.Execute(this, new KeyInfo());
+				_commandFactory.Execute(this, KeyInfo.GetInput());
 
 				if (_characters.Count != 0) continue;
 				
@@ -106,9 +121,9 @@ namespace ArmeniRpg.Engine
 			       ?? Items.FirstOrDefault(c => c.Position == position);
 		}
 
-		public void SetStatus(string status)
+		public void PushStatus(string status)
 		{
-			_status = status;
+			_statusList.Enqueue(status);
 		}
 
 		public bool IsInBounds(Position position)
